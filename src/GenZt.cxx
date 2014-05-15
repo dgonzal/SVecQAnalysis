@@ -12,6 +12,7 @@ GenZt::GenZt(BaseCycleContainer* bcc){
     {
       GenParticle genp = bcc->genparticles->at(i);
       
+      if(genp.pt()<20) continue;
       //std::cout<<"GenParticle pdgId: "<<genp.pdgId()<<" pT: "<<genp.pt() <<std::endl;
       //std::cout<<"GenParticle pdgId: "<<genp.pdgId()<<std::endl;
 

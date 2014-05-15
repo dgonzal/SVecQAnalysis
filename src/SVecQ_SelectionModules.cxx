@@ -40,7 +40,37 @@ bool GenLeptonSelection::pass(BaseCycleContainer* bcc)
 std::string GenLeptonSelection::description()
 {
     char s[100];
-    sprintf(s, "%d <= NLepton <= %d ",m_NLepton_min, m_NLepton_max);
+    sprintf(s, "%d <= NLepton <= %d",m_NLepton_min, m_NLepton_max);
+
+    return s;
+}
+
+
+GenMissingHTSelection::GenMissingHTSelection(double min, double max)
+{
+  m_min=min;
+  m_max=max;
+}
+
+
+bool GenMissingHTSelection::pass(BaseCycleContainer* bcc)
+{
+  GenZt GenParZt(bcc);
+  LorentzVector missingHT;
+
+  for(unsigned int i=0;i<GenParZt.neutrinos().size(); i++ ){
+    missingHT += GenParZt.neutrinos().at(i).v4();
+  }
+
+  if( missingHT.pt()>m_min &&  missingHT.pt()>m_max) return true;
+
+  return false;
+}
+
+std::string GenMissingHTSelection::description()
+{
+    char s[100];
+    sprintf(s, "%d <= MHT <= %d ",m_min, m_max);
 
     return s;
 }

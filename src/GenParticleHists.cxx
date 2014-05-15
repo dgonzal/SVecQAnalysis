@@ -84,38 +84,6 @@ void GenParticleHists::Init()
   Book( TH1F( "delR", "#Delta R(i,j)", 100, 0 , 20));
   Book( TH1F( "delR_ly", "#Delta R(i,jet)", 100, 0 ,20));
 
-
-  if(m_partn==l){
-    Book( TH1F( "HT_electron", "H_{T,e}", 100, 0 , 3000));
-    Book( TH1F( "HT_electron_ly", "H_{T,e}", 100, 0 , 3000));
-
-    Book( TH1F( "HT_muon", "H_{T, #mu}", 100, 0 , 3000));
-    Book( TH1F( "HT_muon_ly", "H_{T, #mu}", 100, 0 , 3000));
-
-    Book( TH1F( "HT_neutrino", "H_{T, #nu}", 100, 0 , 3000));
-    Book( TH1F( "HT_neutrino_ly", "H_{T, #nu}", 100, 0 , 3000));
-
-    Book( TH1F( "HT_b", "H_{T, b}", 100, 0 , 3000));
-    Book( TH1F( "HT_b_ly", "H_{T, b}", 100, 0 , 3000));
-    Book( TH1F( "HT_l", "H_{T, light}", 100, 0 , 3000));
-    Book( TH1F( "HT_l_ly", "H_{T, light}", 100, 0 , 3000));
-
-    Book( TH1F( "HT_genjets", "H_{T, genjets}", 100, 0 , 3000));
-    Book( TH1F( "HT_genjets_ly", "H_{T, genjets}", 100, 0 , 3000));
-
-
-
-    Book( TH1F( "HT_lepton", "H_{T, lep}", 100, 0 , 3000));
-    Book( TH1F( "HT_lepton_ly", "H_{T, lep}", 100, 0 , 3000));
-
-    Book( TH1F( "HT_lepton_met", "H_{T, lep+met}", 100, 0 , 3000));
-    Book( TH1F( "HT_lepton_met_ly", "H_{T, lep+met}", 100, 0 , 3000));
-
-    Book( TH1F( "HT", "H_{T}", 100, 0 , 3000));
-    Book( TH1F( "HT_ly", "H_{T}", 100, 0 , 3000));
-  }
-
-
 }
 
 void GenParticleHists::Fill()
@@ -242,60 +210,7 @@ void GenParticleHists::Fill()
 
   
   
-  if(m_partn==l){
-    
-    LorentzVector sum_electron;
-    LorentzVector sum_muon;
-    LorentzVector sum_neutrino;
-    LorentzVector sum_b;
-    LorentzVector sum_l;
-    LorentzVector sum_genjets;
-
-    for(unsigned int i=0; i < GenParZt.electrons().size(); ++i)
-      sum_electron = sum_electron+GenParZt.electrons().at(i).v4();
-   
-    for(unsigned int i=0; i < GenParZt.muons().size(); ++i)
-      sum_muon += GenParZt.muons().at(i).v4();
- 
-    for(unsigned int i=0; i < GenParZt.neutrinos().size(); ++i)
-      sum_neutrino = sum_neutrino+GenParZt.neutrinos().at(i).v4();
-
-    for(unsigned int i=0; i < GenParZt.lquarks().size(); ++i)
-      sum_l = sum_l+GenParZt.lquarks().at(i).v4();
-
-    for(unsigned int i=0; i < GenParZt.b().size(); ++i)
-      sum_b = sum_b+GenParZt.b().at(i).v4();
-
-    for(unsigned int i=0; i < bcc->genjets->size(); ++i)
-      sum_genjets = sum_genjets+bcc->genjets->at(i).v4();
-
-    Hist("HT_electron")->Fill(fabs(sum_electron.pt()),weight);
-    Hist("HT_electron_ly")->Fill(fabs(sum_electron.pt()),weight);
-
-    Hist("HT_muon")->Fill(fabs(sum_muon.pt()),weight);
-    Hist("HT_muon_ly")->Fill(fabs(sum_muon.pt()),weight);
-    
-    Hist("HT_b")->Fill(fabs(sum_b.pt()),weight);
-    Hist("HT_b_ly")->Fill(fabs(sum_b.pt()),weight);
-
-    Hist("HT_l")->Fill(fabs(sum_l.pt()),weight);
-    Hist("HT_l_ly")->Fill(fabs(sum_l.pt()),weight);
-
-    Hist("HT_genjets")->Fill(fabs(sum_genjets.pt()),weight);
-    Hist("HT_genjets_ly")->Fill(fabs(sum_genjets.pt()),weight);
-
-    Hist("HT_neutrino")->Fill(fabs(sum_neutrino.pt()),weight);
-    Hist("HT_neutrino_ly")->Fill(fabs(sum_neutrino.pt()),weight);
-
-    Hist("HT_lepton")->Fill(fabs((sum_electron+sum_muon).pt()),weight);
-    Hist("HT_lepton_ly")->Fill(fabs((sum_electron+sum_muon).pt()),weight);
-
-    Hist("HT_lepton_met")->Fill(fabs((sum_electron+sum_muon+sum_neutrino).pt()),weight);
-    Hist("HT_lepton_met_ly")->Fill(fabs((sum_electron+sum_muon+sum_neutrino).pt()),weight);
-
-    Hist("HT")->Fill(fabs((sum_electron+sum_muon+sum_neutrino+sum_genjets).pt()),weight);
-    Hist("HT_ly")->Fill(fabs((sum_electron+sum_muon+sum_neutrino+sum_genjets).pt()),weight);
-  }
+  
   
 }
 

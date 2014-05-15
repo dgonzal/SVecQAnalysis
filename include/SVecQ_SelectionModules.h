@@ -21,5 +21,21 @@ class GenLeptonSelection: public SelectionModule {
    double m_pt_min;
 };
 
+class GenMissingHTSelection: public SelectionModule {
+ public:
+  GenMissingHTSelection(double min, double max);
+    ~GenMissingHTSelection(){};
+
+   virtual bool pass(BaseCycleContainer*);
+   virtual std::string description();
+
+
+ private:
+   double m_max;
+   double m_min;
+};
+
+
+
 
 #endif
