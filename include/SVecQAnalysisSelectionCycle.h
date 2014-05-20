@@ -47,7 +47,7 @@ private:
 
   // Macro adding the functions for dictionary generation
   ClassDef( SVecQAnalysisSelectionCycle, 0 );
-
+  std::string m_Lepton_Selection;
 }; // class SVecQAnalysisSelectionCycle
 
 #endif // SVecQAnalysisSelectionCycle_H

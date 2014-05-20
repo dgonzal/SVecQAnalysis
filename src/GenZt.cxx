@@ -12,8 +12,11 @@ GenZt::GenZt(BaseCycleContainer* bcc){
     {
       GenParticle genp = bcc->genparticles->at(i);
       
-      if(genp.pt()<20) continue;
-      //std::cout<<"GenParticle pdgId: "<<genp.pdgId()<<" pT: "<<genp.pt() <<std::endl;
+      
+
+
+      //if(genp.pt()<20) continue;
+      //std::cout<<"GenParticle pdgId: "<<genp.pdgId()<<" status: "<<genp.status() <<std::endl;
       //std::cout<<"GenParticle pdgId: "<<genp.pdgId()<<std::endl;
 
       switch(genp.pdgId())
@@ -26,12 +29,12 @@ GenZt::GenZt(BaseCycleContainer* bcc){
 	case -3:
 	case 4:
 	case -4:
-	  m_lquarks.push_back(genp);
+	  if(genp.status()==1)m_lquarks.push_back(genp);
 	  break;
 
 	case 5:
 	case -5:
-	  m_b.push_back(genp);
+	  if(genp.status()==1)m_b.push_back(genp);
 	  break;
 
 	case 6:
@@ -64,19 +67,19 @@ GenZt::GenZt(BaseCycleContainer* bcc){
 
 	case 11:
 	case -11:
-	    m_electron.push_back(genp);
+	    if(genp.status()==1)m_electron.push_back(genp);
 	  break;
 
 	case 13:
 	case -13:
-	    m_muons.push_back(genp);
+	    if(genp.status()==1)m_muons.push_back(genp);
 	  break;
 
 	case 12:
 	case -12:
 	case 14:
 	case -14:
-	    m_neutrinos.push_back(genp);
+	    if(genp.status()==1)m_neutrinos.push_back(genp);
 	  break;
 
 	  

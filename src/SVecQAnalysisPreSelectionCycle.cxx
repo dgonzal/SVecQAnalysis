@@ -7,23 +7,6 @@ using namespace std;
 #include "include/SVecQAnalysisPreSelectionCycle.h"
 #include "include/SVecQAnalysisHists.h"
 
-#include "include/GenZt.h"
-
-//#include "JetCorrectorParameters.h"
-
-
-
-#include "SFrameAnalysis/include/EventHists.h"
-#include "SFrameAnalysis/include/JetHists.h"
-#include "SFrameAnalysis/include/MuonHists.h"
-#include "SFrameAnalysis/include/ElectronHists.h"
-#include "include/GenParticleHists.h"
-
-
-
-#include "SFrameAnalysis/include/SelectionModules.h"
-#include "include/SVecQ_SelectionModules.h"
-
 
 ClassImp( SVecQAnalysisPreSelectionCycle );
 
@@ -33,8 +16,7 @@ SVecQAnalysisPreSelectionCycle::SVecQAnalysisPreSelectionCycle()
   // constructor, declare additional variables that should be 
   // obtained from the steering-xml file
   
-
-  DeclareProperty( "Lepton_Selection", m_Lepton_Selection );
+  DeclareProperty( "GenLepton_Selection", m_GenLepton_Selection );
 
 
   // set the integrated luminosity per bin for the lumi-yield control plots
@@ -83,32 +65,34 @@ void SVecQAnalysisPreSelectionCycle::BeginInputData( const SInputData& id ) thro
   // -------------------- set up the selections ---------------------------
 
   Selection* preselection = new Selection("preselection");
-  preselection->addSelectionModule(new NJetSelection(2));//at least two jets
+  //preselection->addSelectionModule(new NJetSelection(2));//at least two jets
 
   int NLepton_max = 100;
   int NLepton_min = 0;
 
-  if(m_Lepton_Selection=="1Lepton"){
+  if(m_GenLepton_Selection=="1Lepton"){
     NLepton_max = 1;
     NLepton_min = 1;
   }
-  else if(m_Lepton_Selection=="2Lepton"){  
+  else if(m_GenLepton_Selection=="2Lepton"){  
     NLepton_max = 2;
     NLepton_min = 2;
   }
-  else if(m_Lepton_Selection=="3Lepton"){  
+  else if(m_GenLepton_Selection=="3Lepton"){  
     NLepton_max = 100;
     NLepton_min = 3;
   }
-  else if(m_Lepton_Selection=="0Lepton"){
+  else if(m_GenLepton_Selection=="0Lepton"){
     NLepton_max = 0;
     NLepton_min = 0;
-    preselection->addSelectionModule(new NCMSTopTagSelection(1, 10));
+    preselection->addSelectionModule(new GenTopTag());
   }
   else
-    cerr<<"No existing Lepton Selection choosen"<<endl;
-
-
+    cerr<<"No existing Lepton Selection choosen"<<" "<<" "<< NLepton_max<<" "<<NLepton_min<<endl;
+/*	
+  NLepton_max = 1;
+  NLepton_min = 1;
+*/
   //cout<<NLepton_max<<" "<<NLepton_min<<endl;
 
   preselection->addSelectionModule(new GenLeptonSelection(NLepton_min, NLepton_max,2.5,40));

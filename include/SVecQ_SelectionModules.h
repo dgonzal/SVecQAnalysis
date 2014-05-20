@@ -8,7 +8,7 @@
 class GenLeptonSelection: public SelectionModule {
  public:
   GenLeptonSelection(int NLepton_min, int NLepton_max, double eta_max, double pt_min);
-    ~GenLeptonSelection(){};
+  ~GenLeptonSelection(){};
 
    virtual bool pass(BaseCycleContainer*);
    virtual std::string description();
@@ -24,7 +24,35 @@ class GenLeptonSelection: public SelectionModule {
 class GenMissingHTSelection: public SelectionModule {
  public:
   GenMissingHTSelection(double min, double max);
-    ~GenMissingHTSelection(){};
+  ~GenMissingHTSelection(){};
+
+   virtual bool pass(BaseCycleContainer*);
+   virtual std::string description();
+
+
+ private:
+   double m_max;
+   double m_min;
+};
+
+class hadZmass: public SelectionModule {
+ public:
+  hadZmass(double min, double max);
+  ~hadZmass(){};
+
+   virtual bool pass(BaseCycleContainer*);
+   virtual std::string description();
+
+
+ private:
+   double m_max;
+   double m_min;
+};
+
+class lepZmass: public SelectionModule {
+ public:
+  lepZmass(double min, double max);
+  ~lepZmass(){};
 
    virtual bool pass(BaseCycleContainer*);
    virtual std::string description();
@@ -36,6 +64,17 @@ class GenMissingHTSelection: public SelectionModule {
 };
 
 
+class GenTopTag : public SelectionModule {
+ public:
+  GenTopTag();
+  ~GenTopTag(){};
+  
+  virtual bool pass(BaseCycleContainer*);
+  virtual std::string description();
 
+
+ private:
+   
+};
 
 #endif

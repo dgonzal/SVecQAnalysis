@@ -140,6 +140,7 @@ void GenParticleHists::Fill()
   // important: get the event weight
   double weight = calc->GetWeight();
  
+  //cout<<weight<<endl;
 
   int NPart = Particle.size();
   

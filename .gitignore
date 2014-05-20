@@ -5,3 +5,4 @@ src/ExampleAnalysis_Dict.h
 .sframe*
 test/
 .#*
+*jobTempOutput*

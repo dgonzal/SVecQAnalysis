@@ -22,6 +22,7 @@ using namespace std;
 
 
 #include "SFrameAnalysis/include/SelectionModules.h"
+#include "include/SVecQ_SelectionModules.h"
 
 
 
@@ -33,6 +34,8 @@ SVecQAnalysisSelectionCycle::SVecQAnalysisSelectionCycle()
   // constructor, declare additional variables that should be 
   // obtained from the steering-xml file
   
+  DeclareProperty( "Lepton_Selection", m_Lepton_Selection );
+
   // set the integrated luminosity per bin for the lumi-yield control plots
   SetIntLumiPerBin(500.);
 
@@ -77,9 +80,24 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
   AnalysisCycle::BeginInputData( id );
 
   // -------------------- set up the selections ---------------------------
+  Selection* GenMHT = new Selection("GenMHT");
+  GenMHT->addSelectionModule(new GenMissingHTSelection(50,50000000));
 
+  /*
+  Selection* RecoZmass = new Selection("RecoZmass");
 
+  if(m_Lepton_Selection=="1Lepton"||m_Lepton_Selection=="0Lepton"){
+    RecoZmass->addSelectionModule(new hadZmass(80,120));
+  }
+  else if (m_Lepton_Selection=="2Lepton"||m_Lepton_Selection=="3Lepton"){
+    RecoZmass->addSelectionModule(new lepZmass(80,120));
+  }
+  else
+    cout<<"no Z mass cut applied"<<endl;
 
+  RegisterSelection(RecoZmass);
+  */
+  RegisterSelection(GenMHT);
   // ---------------- set up the histogram collections --------------------
 
   // histograms without any cuts
@@ -152,6 +170,11 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   BaseHists* gen_wboson    = GetHistCollection("gen_wboson"   );   
   BaseHists* gen_virW      = GetHistCollection("gen_virW"     );
   BaseHists* gen_gluon     = GetHistCollection("gen_gluon"    );
+
+  static Selection* GenMHT = GetSelection("GenMHT");
+  static Selection* RecoZmass = GetSelection("RecoZmass");
+  if(!GenMHT->passSelection())  throw SError( SError::SkipEvent );
+  //if(!RecoZmass->passSelection())  throw SError( SError::SkipEvent );
 
   genjets       ->Fill();  
   gen_lquarks   ->Fill();  

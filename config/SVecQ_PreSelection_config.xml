@@ -203,7 +203,7 @@
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
-
+-->
 	        <InputData Lumi="1" NEventsSkip="0" NEventsMax="-1" Type="MC" Version="TTbar_1000toInf" Cacheable="True">
                   &TTbar_1000toInf;
 		  <InputTree Name="AnalysisTree" /> 
@@ -260,7 +260,7 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData> 
--->
+
 <!--
 	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="TTbar_MadGraph" Cacheable="True">
                   &TTbar_MadGraph;
@@ -413,12 +413,12 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
--->	        <InputData Lumi="1" NEventsSkip="0" NEventsMax="-1" Type="MC" Version="QCDEm350" Cacheable="True">
+	        <InputData Lumi="1" NEventsSkip="0" NEventsMax="-1" Type="MC" Version="QCDEm350" Cacheable="True">
                   &QCDEm350;
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
-		
+-->		
 <!--
                 <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCDBCtoE20to30" Cacheable="True">
                   &QCDBCtoE20to30;
@@ -693,9 +693,9 @@
 
 		<UserConfig>
 
-		   <Item Name="Lepton_Selection" Value="1Lepton"/>
+		   <Item Name="GenLepton_Selection" Value="1Lepton" />
 
-		   <Item Name="PFParticles" Value="PFParticles" />  
+		   <!-- <Item Name="PFParticles" Value="PFParticles" />-->  
 		   <Item Name="JetCollection" Value="goodPatJetsPFlow" />  
 		   <Item Name="GenJetCollection" Value="ak5GenJetsNoNu" /> 
 		   <Item Name="ElectronCollection" Value="selectedPatElectronsPFlowLoose" /> 
@@ -711,12 +711,12 @@
 		   <Item Name="GenParticleCollection" Value="GenParticles" />  
 		   <Item Name="PFParticleCollection" Value="PFParticles" />
 
-           <Item Name="JECFileLocation" Value="/nfs/dust/cms/user/peiffer/CMSSW_5_3_10/src" />
-           <Item Name="JECDataGlobalTag" Value="FT_53_V21_AN6" />           
-           <Item Name="JECMCGlobalTag" Value="START53_V27" />
-           <Item Name="JECJetCollection" Value="AK5PFchs" />
+		   <Item Name="JECFileLocation" Value="/nfs/dust/cms/user/peiffer/CMSSW_5_3_10/src" />
+		   <Item Name="JECDataGlobalTag" Value="FT_53_V21_AN6" />           
+		   <Item Name="JECMCGlobalTag" Value="START53_V27" />
+		   <Item Name="JECJetCollection" Value="AK5PFchs" />
 
-           <Item Name="ReversedElectronSelection" Value="false" />
+       
 		</UserConfig>
 	</Cycle>
 </JobConfiguration>

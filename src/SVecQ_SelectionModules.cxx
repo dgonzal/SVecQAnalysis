@@ -62,7 +62,7 @@ bool GenMissingHTSelection::pass(BaseCycleContainer* bcc)
     missingHT += GenParZt.neutrinos().at(i).v4();
   }
 
-  if( missingHT.pt()>m_min &&  missingHT.pt()>m_max) return true;
+  if( missingHT.pt()>m_min &&  missingHT.pt()<m_max) return true;
 
   return false;
 }
@@ -70,7 +70,151 @@ bool GenMissingHTSelection::pass(BaseCycleContainer* bcc)
 std::string GenMissingHTSelection::description()
 {
     char s[100];
-    sprintf(s, "%d <= MHT <= %d ",m_min, m_max);
+    sprintf(s, "%f <= MHT <= %f ",m_min, m_max);
+
+    return s;
+}
+
+
+hadZmass::hadZmass(double min, double max)
+{
+  m_min=min;
+  m_max=max;
+}
+
+bool hadZmass::pass(BaseCycleContainer* bcc)
+{
+  std::vector< Jet >* jets = bcc->jets; 
+  int NJets = jets->size();
+ 
+  for(int i =0; i<NJets; i++)
+    if(jets->at(i).v4().M2()<m_max*m_max && jets->at(i).v4().M2()>m_min*m_min) return true;
+  
+  for(int i =0; i<NJets; i++){
+    LorentzVector Z = jets->at(i).v4();
+    for(int p =1; p<(NJets-i); p++){
+      Z +=  jets->at(i+p).v4();
+      if(Z.M2()<m_max*m_max && Z.M2()>m_min*m_min) return true;
+    }
+  }
+
+  return false;
+}
+
+std::string hadZmass::description()
+{
+    char s[100];
+    sprintf(s, "%f <= had Z_mass <= %f ",m_min, m_max);
+
+    return s;
+}
+
+
+lepZmass::lepZmass(double min, double max)
+{
+  m_min=min;
+  m_max=max;
+}
+
+bool lepZmass::pass(BaseCycleContainer* bcc)
+{
+  std::vector< Electron >* electrons = bcc->electrons;
+  std::vector< Muon >* muons = bcc->muons;
+
+  for(int i =0; i<electrons->size(); i++){
+    LorentzVector Z = electrons->at(i).v4();
+    for(int p =1; p<(electrons->size()-i); p++){
+      Z +=  electrons->at(i+p).v4();
+      if(Z.M2()<m_max*m_max && Z.M2()>m_min*m_min) return true;
+    }
+  }
+
+  for(int i =0; i<muons->size(); i++){
+    LorentzVector Z = muons->at(i).v4();
+    for(int p =1; p<(muons->size()-i); p++){
+      Z +=  muons->at(i+p).v4();
+      if(Z.M2()<m_max*m_max && Z.M2()>m_min*m_min) return true;
+    }
+  }
+
+
+
+  return false;
+}
+
+std::string lepZmass::description()
+{
+    char s[100];
+    sprintf(s, "%f <= lep Z_mass <= %f ",m_min, m_max);
+
+    return s;
+}
+
+
+GenTopTag::GenTopTag()
+{
+}
+
+bool GenTopTag::pass(BaseCycleContainer* bcc)
+{
+  std::vector< GenTopJet >* gentopjets =bcc->topjetsgen;
+
+  if(gentopjets->size()<1) return false;
+
+  for(unsigned int i=0; i<gentopjets->size(); ++i){
+    GenTopJet gentop = gentopjets->at(i);
+    double nsubjets=gentop.subjets().size();
+    double mmin =0;
+    
+    //at least 3 sub-jets
+    if(nsubjets<3) return false;
+
+    LorentzVector allsubjets(0,0,0,0);
+    
+    for(int j=0; j<nsubjets; ++j) {
+      allsubjets += gentop.subjets()[j].v4();
+    }
+    if(!allsubjets.isTimelike()) return false;
+       
+    double mjet = allsubjets.M();
+
+    if(nsubjets>=3) {
+      
+      std::vector<Particle> subjets = gentop.subjets();
+      sort(subjets.begin(), subjets.end(), HigherPt());
+      
+      double m01 = 0;
+      if( (subjets[0].v4()+subjets[1].v4()).isTimelike())
+	m01=(subjets[0].v4()+subjets[1].v4()).M();
+      double m02 = 0;
+      if( (subjets[0].v4()+subjets[2].v4()).isTimelike() )
+	m02=(subjets[0].v4()+subjets[2].v4()).M();
+      double m12 = 0;
+      if( (subjets[1].v4()+subjets[2].v4()).isTimelike() )
+	m12 = (subjets[1].v4()+subjets[2].v4()).M();
+      
+      //minimum pairwise mass
+      mmin = std::min(m01,std::min(m02,m12));
+    }
+  
+    //minimum pairwise mass > 50 GeV/c^2
+    if(mmin<50) return false;
+    //jet mass between 140 and 250 GeV/c^2
+    if(mjet<140 || mjet>250) return false;
+
+    return true;
+
+  }
+
+  return false;
+
+}
+
+
+std::string GenTopTag::description()
+{
+    char s[100];
+    sprintf(s, "CMSTopTag");
 
     return s;
 }

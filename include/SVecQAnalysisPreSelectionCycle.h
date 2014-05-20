@@ -5,6 +5,27 @@
 
 #include "SFrameAnalysis/include/AnalysisCycle.h"
 #include "SFrameAnalysis/include/Cleaner.h"
+
+
+#include "include/GenZt.h"
+
+//#include "JetCorrectorParameters.h"
+
+
+
+#include "SFrameAnalysis/include/EventHists.h"
+#include "SFrameAnalysis/include/JetHists.h"
+#include "SFrameAnalysis/include/MuonHists.h"
+#include "SFrameAnalysis/include/ElectronHists.h"
+#include "include/GenParticleHists.h"
+
+
+
+#include "SFrameAnalysis/include/SelectionModules.h"
+#include "include/SVecQ_SelectionModules.h"
+
+
+
 /**
  *   @short SVecQAnalysis of an analysis cycle
  *
@@ -44,10 +65,13 @@ private:
   //
   // Put all your private variables here
   //
+  std::string m_GenLepton_Selection;
+
+
 
   // Macro adding the functions for dictionary generation
   ClassDef( SVecQAnalysisPreSelectionCycle, 0 );
-  std::string m_Lepton_Selection;
+  
 
 
 }; // class SVecQAnalysisPreSelectionCycle
