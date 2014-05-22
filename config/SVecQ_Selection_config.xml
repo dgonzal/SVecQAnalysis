@@ -13,51 +13,51 @@
 
 	<Package Name="SVecQAnalysis.par" />
 
-	<Cycle Name="SVecQAnalysisSelectionCycle"  RunMode="PROOF" ProofServer="PoD://"  ProofWorkDir="/nfs/dust/cms/user/gonvaq/PROOF/" OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_Selection_2Lepton/" PostFix="" TargetLumi="19700" >
-<!--	<Cycle Name="SVecQAnalysisSelectionCycle"  OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_Selection_2Lepton/" PostFix="" TargetLumi="19700" >-->
+	<Cycle Name="SVecQAnalysisSelectionCycle"  RunMode="PROOF" ProofServer="PoD://"  ProofWorkDir="/nfs/dust/cms/user/gonvaq/PROOF/" OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_Selection_3Lepton/" PostFix="" TargetLumi="19700" >
+<!--	<Cycle Name="SVecQAnalysisSelectionCycle"  OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_Selection_3Lepton/" PostFix="" TargetLumi="19700" >-->
 
 		<InputData Lumi="381970" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-800" Cacheable="False">
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-800.root" Lumi="0.0"/> 
+		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_3Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-800.root" Lumi="0.0"/> 
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
 		<InputData Lumi="645161" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-1000" Cacheable="False">
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1000.root" Lumi="0.0"/> 
+		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_3Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1000.root" Lumi="0.0"/> 
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
 		<InputData Lumi="16425755" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-1300" Cacheable="False">
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1300.root" Lumi="0.0"/> 
+		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_3Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1300.root" Lumi="0.0"/> 
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
 		<InputData Lumi="44964028" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-1500" Cacheable="False">
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1500.root" Lumi="0.0"/> 
+		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_3Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1500.root" Lumi="0.0"/> 
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
 		<InputData Lumi="191058463" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-1800" Cacheable="False">
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1800.root" Lumi="0.0"/> 
+		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_3Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-1800.root" Lumi="0.0"/> 
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
 		<InputData Lumi="488281250" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-2000" Cacheable="False">
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-2000.root" Lumi="0.0"/> 
+		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_3Lepton/SVecQAnalysisPreSelectionCycle.MC.TprimeToTZinc_M-2000.root" Lumi="0.0"/> 
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
-
+<!--
 		<InputData Lumi="88185" NEventsMax="-1" Type="MC" Version="TTbar" Cacheable="False">
 		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.TTbar.root" Lumi="0.0"/> 
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData> 
-
+-->
 <!--
 
 		<InputData Lumi="169478" NEventsMax="-1" Type="MC" Version="TTbar_700to1000" Cacheable="False">
@@ -73,7 +73,7 @@
 		</InputData> 
 -->
 
-
+<!--
 	        <InputData Lumi="66635" NEventsMax="-1" Type="MC" Version="SingleTop_T_tch" Cacheable="False">
 		        <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_2Lepton/SVecQAnalysisPreSelectionCycle.MC.SingleTop_T_tch.root" Lumi="0.0"/> 
 			<InputTree Name="AnalysisTree" /> 
@@ -270,7 +270,7 @@
 			<InputTree Name="AnalysisTree" /> 
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
-
+-->
 <!--
 		<InputData Lumi="41753.78" NEventsMax="-1" Type="MC" Version="QCD_Pt-30to50" Cacheable="False">
 		        <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton/SVecQAnalysisPreSelectionCycle.MC.QCD_Pt-30to50.root" Lumi="0.0"/>
@@ -346,7 +346,7 @@
 
 
 <UserConfig>
-                        <Item Name="Lepton_Selection" Value="2Lepton"/>
+                        <Item Name="Lepton_Selection" Value="0Lepton"/>
 
                         <Item Name="PFParticles" Value="PFParticles" />  
 			<Item Name="JetCollection" Value="goodPatJetsPFlow" />

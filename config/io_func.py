@@ -9,15 +9,19 @@ from xml.dom.minidom import parse, parseString
 from xml.dom.minidom import Document
 import xml.sax
 
-from subprocess import call
+import math
+
+
 
 
 #my classes
 from Inf_Classes import *
+from batch_classes import *
+
 
 def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1):
     doc = Document()
-    root = doc.createElement("JobConfig")
+    root = doc.createElement("JobConfiguration")
     root.setAttribute( 'JobName', Job.JobName)
     root.setAttribute( 'OutputLevel', Job.OutputLevel)
     
@@ -45,7 +49,9 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1):
         
         # Set Attr.
         tempChild.setAttribute( 'Name', cycle.Cyclename)
-        tempChild.setAttribute('OutputDirectory', cycle.OutputDirectory)
+        if not os.path.exists(cycle.OutputDirectory+'test/'):
+            os.makedirs(cycle.OutputDirectory+'test/')
+        tempChild.setAttribute('OutputDirectory', cycle.OutputDirectory+'test/')
         tempChild.setAttribute('PostFix', cycle.PostFix)
         tempChild.setAttribute('TargetLumi', cycle.TargetLumi)
         
@@ -92,9 +98,8 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1):
         for item in cycle.Cycle_UserConf:
             ConfigGrandGrandchild = doc.createElement('Item')
             ConfigGrandchild.appendChild(ConfigGrandGrandchild)
-
-            ConfigGrandGrandchild.setAttribute( item.Name,item.Value )
-
+            ConfigGrandGrandchild.setAttribute('Name',item.Name)
+            ConfigGrandGrandchild.setAttribute('Value',item.Value)
     #print Job.Job_Cylce[0].Cyclename
 
     return root.toprettyxml()
@@ -126,37 +131,40 @@ class header(object):
 def write_all_xml(path,header):
     NEventsBreak= header.NEventsBreak
     LastBreak = header.LastBreak
-    
+    #print LastBreak,
+
     Version = header.Version
     if Version[0] =='-1':Version =-1
 
+    #print LastBreak/NEventsBreak
+
     if NEventsBreak!=0 and LastBreak!=0:
-        for i in range(LastBreak/NEventsBreak+1):
-            outfile = open(path+'_'+str(i)+'.xml','w')
+        for i in range(int(math.ceil(LastBreak/NEventsBreak)+1)):
+            outfile = open(path+'_'+str(i+1)+'.xml','w+')
             for line in header.header:
                 outfile.write(line)
-                print line
-
+                #print line
+            #print i
             if(i*NEventsBreak < LastBreak):
                 outfile.write(write_job(Job,Version,i*NEventsBreak,(i+1)*NEventsBreak))
-                print write_job(Job,Version,i*NEventsBreak,(i+1)*NEventsBreak)
+                #print write_job(Job,Version,i*NEventsBreak,(i+1)*NEventsBreak)
             if(i*NEventsBreak >= LastBreak):
-                outfile.write(write_job(Job,Version,LastBreak))
-                print write_job(Job,Version,LastBreak)
+                outfile.write(write_job(Job,Version,LastBreak,-1))
+                #print write_job(Job,Version,LastBreak)
             outfile.close()
     
     else:
-        outfile = open(path+'_OneCore'+'.xml','w')
+        outfile = open(path+'_OneCore'+'.xml','w+')
         for line in header.header:
             outfile.write(line)
-            print line
-        print write_job(Job,Version)
+            #print line
+        #print write_job(Job,Version)
         outfile.write(write_job(Job,Version))
         outfile.close()
 
 
 
-xmlfile = "parser_test.xml"
+xmlfile = 'par_SVecQ_PreSelection_config.xml'#"parser_test.xml"
 
 sax_parser = xml.sax.make_parser()
 xmlparsed = parse(xmlfile,sax_parser)
@@ -166,20 +174,12 @@ header = header(xmlfile)
 node = xmlparsed.getElementsByTagName('JobConfiguration')[0]
 Job = JobConfig(node)
 
-Job.Job_Cylce[0].Cycle_InputData[0].split_NEvents(10000,20000)
-
-
-
-NEventsBreak =Job.Job_Cylce[0].Cycle_InputData[0].NEventsBreak
-LastBreak = Job.Job_Cylce[0].Cycle_InputData[0].LastBreak
-
-#print write_job(Job,['TTbar'])
-
 if not os.path.exists('test/'):
     os.makedirs('test/')
 
 write_all_xml('test/test',header)
 
-list_name = call(["ls", "-l"])
+write_script()
 
-print list_name
+
+submitt_qsub(math.ceil(header.LastBreak/header.NEventsBreak)+1)

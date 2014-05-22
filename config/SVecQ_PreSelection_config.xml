@@ -125,9 +125,8 @@
 
 	<Package Name="SVecQAnalysis.par" />
 
-	<Cycle Name="SVecQAnalysisPreSelectionCycle"  RunMode="PROOF" ProofServer="PoD://"  ProofWorkDir="/nfs/dust/cms/user/gonvaq/PROOF/" OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_1Lepton/" PostFix="" TargetLumi="0" > 
-<!--	<Cycle Name="SVecQAnalysisPreSelectionCycle"  OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_1Lepton/" PostFix="" TargetLumi="1" >-->
-
+	<Cycle Name="SVecQAnalysisPreSelectionCycle"  RunMode="PROOF" ProofServer="PoD://"  ProofWorkDir="/nfs/dust/cms/user/gonvaq/PROOF/" OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton/" PostFix="" TargetLumi="0" >
+<!--	<Cycle Name="SVecQAnalysisPreSelectionCycle"  OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton/" PostFix="" TargetLumi="1" > -->
 <!--
            <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DATA_A" Cacheable="True">
                         &EleDataA;
@@ -152,7 +151,7 @@
 			<OutputTree Name="AnalysisTree" />  
 		</InputData> 
 -->
-<!--
+
 		<InputData Lumi="1" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-800" Cacheable="True">
 		  &TprimeToTZinc_M-800;
 		  <InputTree Name="AnalysisTree" /> 
@@ -190,7 +189,7 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
-
+<!--
 	        <InputData Lumi="1" NEventsSkip="0" NEventsMax="-1" Type="MC" Version="TTbar" Cacheable="True">
                        &TTbar;
 		       <InputTree Name="AnalysisTree" /> 
@@ -203,7 +202,7 @@
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
--->
+
 	        <InputData Lumi="1" NEventsSkip="0" NEventsMax="-1" Type="MC" Version="TTbar_1000toInf" Cacheable="True">
                   &TTbar_1000toInf;
 		  <InputTree Name="AnalysisTree" /> 
@@ -260,7 +259,7 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData> 
-
+-->
 <!--
 	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="TTbar_MadGraph" Cacheable="True">
                   &TTbar_MadGraph;
@@ -286,14 +285,14 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
-
 		<InputData Lumi="1" NEventsMax="-1" Type="MC" Version="DY4Jets_50toInf" Cacheable="True">
                   &DY4Jets_50toInf;
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
 
-	    
+
+
 	        <InputData Lumi="1" NEventsSkip="15000000" NEventsMax="-1" Type="MC" Version="W1Jets" Cacheable="True">
                   &W1Jets;
 		  <InputTree Name="AnalysisTree" /> 
@@ -316,8 +315,8 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>
--->
-<!--
+
+
 	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCDMu15to20" Cacheable="True">
                   &QCDMu15to20;
 		  <InputTree Name="AnalysisTree" /> 
@@ -334,6 +333,7 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
+
 	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCDMu50to80" Cacheable="True">
                   &QCDMu50to80;
 		  <InputTree Name="AnalysisTree" /> 
@@ -384,13 +384,14 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
--->
-<!--
+
+
 	        <InputData Lumi="1" NEventsSkip="0" NEventsMax="-1" Type="MC" Version="QCDEm20to30" Cacheable="True">
                   &QCDEm20to30;
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
+
 	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCDEm30to80" Cacheable="True">
                   &QCDEm30to80;
 		  <InputTree Name="AnalysisTree" /> 
@@ -407,8 +408,7 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
--->
-<!--	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCDEm250to350" Cacheable="True">
+	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCDEm250to350" Cacheable="True">
                   &QCDEm250to350;
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
@@ -418,7 +418,7 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
--->		
+-->	
 <!--
                 <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCDBCtoE20to30" Cacheable="True">
                   &QCDBCtoE20to30;
@@ -458,8 +458,7 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 		</InputData>
--->
-<!--
+
                <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="QCD_Pt-15to30" Cacheable="True">
                   &QCD_Pt-15to30;
 		  <InputTree Name="AnalysisTree" /> 
@@ -532,8 +531,8 @@
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />
 	       </InputData> 
-
 -->
+
 <!--
 	        <InputData Lumi="1" NEventsMax="-1" Type="MC" Version="DYJets_scaleup" Cacheable="True">
                   &DYJets_scaleup;
@@ -693,7 +692,7 @@
 
 		<UserConfig>
 
-		   <Item Name="GenLepton_Selection" Value="1Lepton" />
+		   <Item Name="GenLepton_Selection" Value="0Lepton" />
 
 		   <!-- <Item Name="PFParticles" Value="PFParticles" />-->  
 		   <Item Name="JetCollection" Value="goodPatJetsPFlow" />  

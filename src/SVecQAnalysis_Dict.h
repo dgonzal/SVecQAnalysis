@@ -42,6 +42,8 @@ extern void G__set_cpp_environmentSVecQAnalysis_Dict();
 #include "include/SVecQAnalysisSelectionCycle.h"
 #include "include/SVecQ_SelectionModules.h"
 #include "include/TestModule.h"
+#include "include/ZHists.h"
+#include "include/tprimeReco.h"
 #include <algorithm>
 namespace std { }
 using namespace std;
