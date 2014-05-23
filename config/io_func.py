@@ -19,7 +19,7 @@ from Inf_Classes import *
 from batch_classes import *
 
 
-def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1):
+def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =""):
     doc = Document()
     root = doc.createElement("JobConfiguration")
     root.setAttribute( 'JobName', Job.JobName)
@@ -52,7 +52,7 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1):
         if not os.path.exists(cycle.OutputDirectory+'test/'):
             os.makedirs(cycle.OutputDirectory+'test/')
         tempChild.setAttribute('OutputDirectory', cycle.OutputDirectory+'test/')
-        tempChild.setAttribute('PostFix', cycle.PostFix)
+        tempChild.setAttribute('PostFix', cycle.PostFix+str(NFile))
         tempChild.setAttribute('TargetLumi', cycle.TargetLumi)
         
         for p in range(len(cycle.Cycle_InputData)):
@@ -145,11 +145,11 @@ def write_all_xml(path,header):
                 outfile.write(line)
                 #print line
             #print i
-            if(i*NEventsBreak < LastBreak):
-                outfile.write(write_job(Job,Version,i*NEventsBreak,(i+1)*NEventsBreak))
+            if((i+1)*NEventsBreak < LastBreak):
+                outfile.write(write_job(Job,Version,i*NEventsBreak,NEventsBreak,i))
                 #print write_job(Job,Version,i*NEventsBreak,(i+1)*NEventsBreak)
-            if(i*NEventsBreak >= LastBreak):
-                outfile.write(write_job(Job,Version,LastBreak,-1))
+            if((i+1)*NEventsBreak >= LastBreak):
+                outfile.write(write_job(Job,Version,i*NEventsBreak,NEventsBreak-(i+1)*NEventsBreak+LastBreak,i))
                 #print write_job(Job,Version,LastBreak)
             outfile.close()
     
