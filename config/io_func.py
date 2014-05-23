@@ -19,7 +19,7 @@ from Inf_Classes import *
 from batch_classes import *
 
 
-def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =""):
+def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =None, FileSplit=-1):
     doc = Document()
     root = doc.createElement("JobConfiguration")
     root.setAttribute( 'JobName', Job.JobName)
@@ -79,15 +79,21 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =""):
             InputGrandchild.setAttribute('NEventsSkip', str(SkipEvents))
             InputGrandchild.setAttribute('NEventsMax', str(MaxEvents))
         
+            count_i =0
+
             for entry in cycle.Cycle_InputData[p].io_list:
-                Datachild= doc.createElement(entry[0])
-                InputGrandchild.appendChild(Datachild)
+                count_i +=1
+                if FileSplit==-1:
+                    Datachild= doc.createElement(entry[0])
+                    InputGrandchild.appendChild(Datachild)
                 
+                elif count_i< (NFile+1)*FileSplit and count_i> NFile*FileSplit and FileSplit!=-1:
+                    Datachild= doc.createElement(entry[0])
+                    InputGrandchild.appendChild(Datachild)
+
                 for it in range(1,(len(entry)-1), 2):
                     Datachild.setAttribute(entry[it],entry[it+1])
-               
-                
-
+            
 
 
         #InGrandGrandchild= doc.createElement('In')
@@ -100,7 +106,6 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =""):
             ConfigGrandchild.appendChild(ConfigGrandGrandchild)
             ConfigGrandGrandchild.setAttribute('Name',item.Name)
             ConfigGrandGrandchild.setAttribute('Value',item.Value)
-    #print Job.Job_Cylce[0].Cyclename
 
     return root.toprettyxml()
 
@@ -120,6 +125,7 @@ class header(object):
                 self.Version = self.ConfigParse.attributes['Version'].value.split(',')
                 self.NEventsBreak = int(self.ConfigParse.attributes['NEventsBreak'].value)
                 self.LastBreak = int(self.ConfigParse.attributes['LastBreak'].value)
+                self.FileSplit = int(self.ConfigParse.attributes['FileSplit'].value)
 
             if 'ConfigSGE' in line : 
                 self.ConfigSGE = parseString(line)
@@ -128,38 +134,41 @@ class header(object):
 
 
 
-def write_all_xml(path,header):
+def write_all_xml(path,header,Job):
     NEventsBreak= header.NEventsBreak
     LastBreak = header.LastBreak
-    #print LastBreak,
+    FileSplit=header.FileSplit
 
     Version = header.Version
     if Version[0] =='-1':Version =-1
-
-    #print LastBreak/NEventsBreak
 
     if NEventsBreak!=0 and LastBreak!=0:
         for i in range(int(math.ceil(LastBreak/NEventsBreak)+1)):
             outfile = open(path+'_'+str(i+1)+'.xml','w+')
             for line in header.header:
                 outfile.write(line)
-                #print line
-            #print i
             if((i+1)*NEventsBreak < LastBreak):
                 outfile.write(write_job(Job,Version,i*NEventsBreak,NEventsBreak,i))
-                #print write_job(Job,Version,i*NEventsBreak,(i+1)*NEventsBreak)
             if((i+1)*NEventsBreak >= LastBreak):
                 outfile.write(write_job(Job,Version,i*NEventsBreak,NEventsBreak-(i+1)*NEventsBreak+LastBreak,i))
-                #print write_job(Job,Version,LastBreak)
             outfile.close()
-    
-    else:
+ 
+   elif FileSplit !=0:
+       for entry in Version:
+            for cycle in Job.Job_Cylce:
+                for p in range(len(cycle.Cycle_InputData)):
+                    if(cycle.Cycle_InputData[p].Version==entry) or Version ==-1:
+                        for it in range(math.ceil(len(cycle.Cycle_InputData[p].io_list)/FileSplit)):
+                            outfile = open(path+'_'+str(it+1)+'.xml','w+')
+                            outfile.write(write_job(Job,Version,i*NEventsBreak,NEventsBreak,it,FileSplit))
+                            outfile.close()
+ 
+
+   else:
         outfile = open(path+'_OneCore'+'.xml','w+')
         for line in header.header:
             outfile.write(line)
-            #print line
-        #print write_job(Job,Version)
-        outfile.write(write_job(Job,Version))
+        outfile.write(write_job(Job,Version,0,-1,"",0))
         outfile.close()
 
 
@@ -177,7 +186,7 @@ Job = JobConfig(node)
 if not os.path.exists('test/'):
     os.makedirs('test/')
 
-write_all_xml('test/test',header)
+write_all_xml('test/test',header,Job)
 
 write_script()
 

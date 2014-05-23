@@ -13,6 +13,7 @@ def write_script():
 # This is a simple example of a SGE batch script
    
 sframe_main test/test_${SGE_TASK_ID}.xml
+if[$?==0] && echo "success "${SGE_TASK_ID}
 """)
     
     myfile.close()
