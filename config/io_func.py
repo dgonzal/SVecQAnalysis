@@ -79,21 +79,41 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =None, FileSplit=-1
             InputGrandchild.setAttribute('NEventsSkip', str(SkipEvents))
             InputGrandchild.setAttribute('NEventsMax', str(MaxEvents))
         
-            count_i =0
+            count_i =-1
+           
+
 
             for entry in cycle.Cycle_InputData[p].io_list:
                 count_i +=1
-                if FileSplit==-1:
+               
+                if FileSplit==-1 :
                     Datachild= doc.createElement(entry[0])
                     InputGrandchild.appendChild(Datachild)
-                
-                elif count_i< (NFile+1)*FileSplit and count_i> NFile*FileSplit and FileSplit!=-1:
+                    #print entry
+                    for it in range(1,(len(entry)-1), 2):
+                        #print entry[it],entry[it+1]
+                        Datachild.setAttribute(entry[it],entry[it+1])
+                       
+                elif count_i<(NFile+1)*FileSplit and count_i>= NFile*FileSplit and FileSplit!=-1 and count_i < len(cycle.Cycle_InputData[p].io_list)-2:
                     Datachild= doc.createElement(entry[0])
                     InputGrandchild.appendChild(Datachild)
+                                        
+                    for it in range(1,(len(entry)), 2):
+                        #print entry[it],entry[it+1]
+                        Datachild.setAttribute(entry[it],entry[it+1])
 
-                for it in range(1,(len(entry)-1), 2):
-                    Datachild.setAttribute(entry[it],entry[it+1])
-            
+
+
+            if FileSplit!=-1:
+                InputTreePos = len(cycle.Cycle_InputData[p].io_list)-2
+                InputTree = doc.createElement(cycle.Cycle_InputData[p].io_list[InputTreePos][0])
+                InputGrandchild.appendChild(InputTree)
+                InputTree.setAttribute(cycle.Cycle_InputData[p].io_list[InputTreePos][1],cycle.Cycle_InputData[p].io_list[InputTreePos][2])
+                
+                OutputTreePos = len(cycle.Cycle_InputData[p].io_list)-1
+                OutputTree = doc.createElement(cycle.Cycle_InputData[p].io_list[OutputTreePos][0])
+                InputGrandchild.appendChild(OutputTree)
+                OutputTree.setAttribute(cycle.Cycle_InputData[p].io_list[OutputTreePos][1],cycle.Cycle_InputData[p].io_list[OutputTreePos][2])
 
 
         #InGrandGrandchild= doc.createElement('In')
@@ -139,10 +159,13 @@ def write_all_xml(path,header,Job):
     LastBreak = header.LastBreak
     FileSplit=header.FileSplit
 
+    NFiles=0
+
     Version = header.Version
     if Version[0] =='-1':Version =-1
 
     if NEventsBreak!=0 and LastBreak!=0:
+        NFiles=int(math.ceil(LastBreak/NEventsBreak)+1)
         for i in range(int(math.ceil(LastBreak/NEventsBreak)+1)):
             outfile = open(path+'_'+str(i+1)+'.xml','w+')
             for line in header.header:
@@ -153,25 +176,29 @@ def write_all_xml(path,header,Job):
                 outfile.write(write_job(Job,Version,i*NEventsBreak,NEventsBreak-(i+1)*NEventsBreak+LastBreak,i))
             outfile.close()
  
-   elif FileSplit !=0:
+    elif FileSplit!=0:
        for entry in Version:
             for cycle in Job.Job_Cylce:
                 for p in range(len(cycle.Cycle_InputData)):
                     if(cycle.Cycle_InputData[p].Version==entry) or Version ==-1:
-                        for it in range(math.ceil(len(cycle.Cycle_InputData[p].io_list)/FileSplit)):
+                        for it in range(int(math.ceil(float(len(cycle.Cycle_InputData[p].io_list)-2)/FileSplit))):
                             outfile = open(path+'_'+str(it+1)+'.xml','w+')
-                            outfile.write(write_job(Job,Version,i*NEventsBreak,NEventsBreak,it,FileSplit))
+                            for line in header.header:
+                                outfile.write(line)
+                            outfile.write(write_job(Job,Version,0,-1,it,FileSplit))
                             outfile.close()
+                            NFiles+=1
  
 
-   else:
+    else:
+        NFiles+=1
         outfile = open(path+'_OneCore'+'.xml','w+')
         for line in header.header:
             outfile.write(line)
         outfile.write(write_job(Job,Version,0,-1,"",0))
         outfile.close()
 
-
+    return NFiles
 
 xmlfile = 'par_SVecQ_PreSelection_config.xml'#"parser_test.xml"
 
@@ -186,9 +213,11 @@ Job = JobConfig(node)
 if not os.path.exists('test/'):
     os.makedirs('test/')
 
-write_all_xml('test/test',header,Job)
+print write_all_xml('test/test',header,Job)
 
 write_script()
-
-
-submitt_qsub(math.ceil(header.LastBreak/header.NEventsBreak)+1)
+"""
+if header.LastBreak !=0 and header.NEventsBreak!=0:
+    submitt_qsub(math.ceil(header.LastBreak/header.NEventsBreak)+1)
+else:
+"""
