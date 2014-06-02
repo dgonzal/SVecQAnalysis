@@ -4,13 +4,14 @@
 #import xml.dom.minidom
 
 import os
+import glob
 
 from xml.dom.minidom import parse, parseString
 from xml.dom.minidom import Document
 import xml.sax
 
 import math
-
+import time
 
 
 
@@ -52,7 +53,7 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =None, FileSplit=-1
         if not os.path.exists(cycle.OutputDirectory+'test/'):
             os.makedirs(cycle.OutputDirectory+'test/')
         tempChild.setAttribute('OutputDirectory', cycle.OutputDirectory+'test/')
-        tempChild.setAttribute('PostFix', cycle.PostFix+str(NFile))
+        tempChild.setAttribute('PostFix', cycle.PostFix+'_'+str(NFile))
         tempChild.setAttribute('TargetLumi', cycle.TargetLumi)
         
         for p in range(len(cycle.Cycle_InputData)):
@@ -75,9 +76,12 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =None, FileSplit=-1
             InputGrandchild.setAttribute('Lumi', cycle.Cycle_InputData[p].Lumi)
             InputGrandchild.setAttribute('Type', cycle.Cycle_InputData[p].Type)
             InputGrandchild.setAttribute('Version', cycle.Cycle_InputData[p].Version)
-            InputGrandchild.setAttribute('Cacheable', cycle.Cycle_InputData[p].Cacheable)
-            InputGrandchild.setAttribute('NEventsSkip', str(SkipEvents))
-            InputGrandchild.setAttribute('NEventsMax', str(MaxEvents))
+            if FileSplit!=-1:
+                InputGrandchild.setAttribute('Cacheable', 'False')
+            else:
+            	InputGrandchild.setAttribute('Cacheable', cycle.Cycle_InputData[p].Cacheable)
+            	InputGrandchild.setAttribute('NEventsSkip', str(SkipEvents))
+            	InputGrandchild.setAttribute('NEventsMax', str(MaxEvents))
         
             count_i =-1
            
@@ -177,7 +181,8 @@ def write_all_xml(path,header,Job):
             outfile.close()
  
     elif FileSplit!=0:
-       for entry in Version:
+        for entry in Version:
+            print 'Going to split job by files:', entry
             for cycle in Job.Job_Cylce:
                 for p in range(len(cycle.Cycle_InputData)):
                     if(cycle.Cycle_InputData[p].Version==entry) or Version ==-1:
@@ -200,6 +205,8 @@ def write_all_xml(path,header,Job):
 
     return NFiles
 
+
+
 xmlfile = 'par_SVecQ_PreSelection_config.xml'#"parser_test.xml"
 
 sax_parser = xml.sax.make_parser()
@@ -212,12 +219,56 @@ Job = JobConfig(node)
 
 if not os.path.exists('test/'):
     os.makedirs('test/')
+    print 'test/ has been created'
 
-print write_all_xml('test/test',header,Job)
 
-write_script()
+if header.Version[0] == "-1":
+    names =[]
+    NFiles = []
+    
+    loop_check = True
+
+    for cycle in Job.Job_Cylce:
+        for process in range(len(cycle.Cycle_InputData)):
+            header.Version = ([cycle.Cycle_InputData[process].Version])
+            names.append(cycle.Cycle_InputData[process].Version)
+            NFiles.append(write_all_xml('test/'+header.Version[0],header,Job))
+            write_script(header.Version[0])
+            submitt_qsub(NFiles[len(NFiles)-1],'test/Stream_'+str(header.Version[0]),str(header.Version[0]))
+
+        while loop_check==True:   
+            if len(names)==0: 
+                loop_check = False 
+                
+            del_list =[]    
+            tot_prog = 0
+
+  	    i =0	   
+
+            for name in names:
+                #print len(names),names[i]#,cycle.OutputDirectory
+                rootCounter = len(glob.glob(cycle.OutputDirectory+'/test/*'+names[i]+'*.root'))
+                tot_prog += rootCounter
+                print names[i]+': ', rootCounter, NFiles[i], round(float(rootCounter)/float(NFiles[i]),3)
+                if NFiles[i] == rootCounter: 
+                   del_list.append(i)
+                i+=1
+
+	    del_list.sort(reverse=True)		
+
+            for m in del_list:
+		
+                del NFiles[m]
+                del names[m]
+           
+            #print 'Total progress', tot_prog
+            print '------------------------------------------------------'
+            time.sleep(45)
+            if len(NFiles)==0: loop_check = False 
+
 """
-if header.LastBreak !=0 and header.NEventsBreak!=0:
-    submitt_qsub(math.ceil(header.LastBreak/header.NEventsBreak)+1)
-else:
+#else: 
+# NFiles = write_all_xml('test/test',header,Job)
+# write_script()
+# submitt_qsub(NFiles,'test/Stream_'+str(header.Version[0]))
 """
