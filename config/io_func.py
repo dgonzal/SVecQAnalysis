@@ -5,6 +5,8 @@
 
 import os
 import glob
+import getopt
+import sys
 
 from xml.dom.minidom import parse, parseString
 from xml.dom.minidom import Document
@@ -13,13 +15,20 @@ import xml.sax
 import math
 import time
 
-
-
 #my classes
 from Inf_Classes import *
 from batch_classes import *
+"""
+options, remainder = getopt.getopt(sys.argv[1:], 'i:v', ['input=', 
+                                                         'verbose',
+                                                         'version=',
+                                                         ])
 
+print 'OPTIONS   :', options
 
+sys.exit(0)
+#return 0
+"""
 def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =None, FileSplit=-1):
     doc = Document()
     root = doc.createElement("JobConfiguration")
@@ -76,12 +85,12 @@ def write_job(Job,Version=-1,SkipEvents=0,MaxEvents=-1,NFile =None, FileSplit=-1
             InputGrandchild.setAttribute('Lumi', cycle.Cycle_InputData[p].Lumi)
             InputGrandchild.setAttribute('Type', cycle.Cycle_InputData[p].Type)
             InputGrandchild.setAttribute('Version', cycle.Cycle_InputData[p].Version)
-            if FileSplit!=-1:
+            if FileSplit!=-1 and 1 == 1:
                 InputGrandchild.setAttribute('Cacheable', 'False')
             else:
-            	InputGrandchild.setAttribute('Cacheable', cycle.Cycle_InputData[p].Cacheable)
-            	InputGrandchild.setAttribute('NEventsSkip', str(SkipEvents))
-            	InputGrandchild.setAttribute('NEventsMax', str(MaxEvents))
+                InputGrandchild.setAttribute('Cacheable', cycle.Cycle_InputData[p].Cacheable)
+                InputGrandchild.setAttribute('NEventsSkip', str(SkipEvents))
+                InputGrandchild.setAttribute('NEventsMax', str(MaxEvents))
         
             count_i =-1
            
@@ -224,6 +233,7 @@ if not os.path.exists('test/'):
 
 if header.Version[0] == "-1":
     names =[]
+    data_type =[]
     NFiles = []
     
     loop_check = True
@@ -232,9 +242,12 @@ if header.Version[0] == "-1":
         for process in range(len(cycle.Cycle_InputData)):
             header.Version = ([cycle.Cycle_InputData[process].Version])
             names.append(cycle.Cycle_InputData[process].Version)
+            data_type.append(cycle.Cycle_InputData[process].Type)
             NFiles.append(write_all_xml('test/'+header.Version[0],header,Job))
             write_script(header.Version[0])
-            submitt_qsub(NFiles[len(NFiles)-1],'test/Stream_'+str(header.Version[0]),str(header.Version[0]))
+            #submitt_qsub(NFiles[len(NFiles)-1],'test/Stream_'+str(header.Version[0]),str(header.Version[0]))
+
+   	resubmit_flag = 1
 
         while loop_check==True:   
             if len(names)==0: 
@@ -243,24 +256,43 @@ if header.Version[0] == "-1":
             del_list =[]    
             tot_prog = 0
 
-  	    i =0	   
+            missing = open('missing_files.txt','w+')
 
+  	    i =0
+
+	    	
             for name in names:
+                
+                rootCounter = 0                
                 #print len(names),names[i]#,cycle.OutputDirectory
-                rootCounter = len(glob.glob(cycle.OutputDirectory+'/test/*'+names[i]+'*.root'))
+                for it in range(NFiles[i]):
+                    #print cycle.OutputDirectory+'test/'+cycle.Cyclename+'.'+data_type[i]+'.'+names[i]+'_'+str(it)+'.root'
+                    if os.path.exists(cycle.OutputDirectory+'test/'+cycle.Cyclename+'.'+data_type[i]+'.'+names[i]+'_'+str(it)+'.root'):
+                        rootCounter +=1 
+                    else:
+                         missing.write(cycle.OutputDirectory+'test/'+cycle.Cyclename+'.'+data_type[i]+'.'+names[i]+'_'+str(it)+'.root\n')
+			 if resubmit_flag: resubmit('test/Stream_'+str(header.Version[0]),names[i]+'_'+str(it))
+                
+
                 tot_prog += rootCounter
                 print names[i]+': ', rootCounter, NFiles[i], round(float(rootCounter)/float(NFiles[i]),3)
                 if NFiles[i] == rootCounter: 
                    del_list.append(i)
                 i+=1
 
-	    del_list.sort(reverse=True)		
 
+            missing.close()
+  	    resubmit_flag = 0
+
+	    del_list.sort(reverse=True)		
+            
             for m in del_list:
-		
+		#add_histos(cycle.OutputDirectory,cycle.Cyclename+'.'+data_type[m]+'.'+names[m],NFiles[m])
                 del NFiles[m]
                 del names[m]
-           
+                del data_type[m]
+
+
             #print 'Total progress', tot_prog
             print '------------------------------------------------------'
             time.sleep(45)
