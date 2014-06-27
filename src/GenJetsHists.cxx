@@ -81,41 +81,53 @@ void GenJetsHists::Init()
   Book( TH1F( "energy_4_ly", "fourth E", 100, 0 , 1000));
 
 
-  Book( TH1F( "pairmass", "mass(i,j)", 100, 0 , 3000));
-  Book( TH1F( "pairmass_ly", "mass(i,j)", 100, 0 , 3000));
+  Book( TH1F( "pairmass", "mass(i,j)", 100, 0 , 1500));
+  Book( TH1F( "pairmass_ly", "mass(i,j)", 100, 0 , 1500));
   Book( TH1F( "delR", "#Delta R(i,j)", 100, 0 , 20));
   Book( TH1F( "delR_ly", "#Delta R(i,jet)", 100, 0 ,20));
 
 
-  Book( TH1F( "HT_electron", "H_{T,e}", 100, 0 , 3000));
-  Book( TH1F( "HT_electron_ly", "H_{T,e}", 100, 0 , 3000));
+  Book( TH1F( "HT_electron", "H_{T,e}", 100, 0 , 1500));
+  Book( TH1F( "HT_electron_ly", "H_{T,e}", 100, 0 , 1500));
   
-  Book( TH1F( "HT_muon", "H_{T, #mu}", 100, 0 , 3000));
-  Book( TH1F( "HT_muon_ly", "H_{T, #mu}", 100, 0 , 3000));
+  Book( TH1F( "HT_muon", "H_{T, #mu}", 100, 0 , 1500));
+  Book( TH1F( "HT_muon_ly", "H_{T, #mu}", 100, 0 , 1500));
   
-  Book( TH1F( "HT_neutrino", "H_{T, #nu}", 100, 0 , 3000));
-  Book( TH1F( "HT_neutrino_ly", "H_{T, #nu}", 100, 0 , 3000));
+  Book( TH1F( "HT_neutrino", "H_{T, #nu}", 100, 0 , 1500));
+  Book( TH1F( "HT_neutrino_ly", "H_{T, #nu}", 100, 0 , 1500));
   
-  Book( TH1F( "HT_b", "H_{T, b}", 100, 0 , 3000));
-  Book( TH1F( "HT_b_ly", "H_{T, b}", 100, 0 , 3000));
-  Book( TH1F( "HT_l", "H_{T, light}", 100, 0 , 3000));
-  Book( TH1F( "HT_l_ly", "H_{T, light}", 100, 0 , 3000));
+  Book( TH1F( "HT_b", "H_{T, b}", 100, 0 , 1500));
+  Book( TH1F( "HT_b_ly", "H_{T, b}", 100, 0 , 1500));
+  Book( TH1F( "HT_l", "H_{T, light}", 100, 0 , 1500));
+  Book( TH1F( "HT_l_ly", "H_{T, light}", 100, 0 , 1500));
   
-  Book( TH1F( "HT_genjets", "H_{T, genjets}", 100, 0 , 3000));
-  Book( TH1F( "HT_genjets_ly", "H_{T, genjets}", 100, 0 , 3000));
-  
-
-
-  Book( TH1F( "HT_lepton", "H_{T, lep}", 100, 0 , 3000));
-  Book( TH1F( "HT_lepton_ly", "H_{T, lep}", 100, 0 , 3000));
-  
-  Book( TH1F( "HT_lepton_met", "H_{T, lep+met}", 100, 0 , 3000));
-  Book( TH1F( "HT_lepton_met_ly", "H_{T, lep+met}", 100, 0 , 3000));
-  
-  Book( TH1F( "HT", "H_{T}", 100, 0 , 3000));
-  Book( TH1F( "HT_ly", "H_{T}", 100, 0 , 3000));
+  Book( TH1F( "HT_genjets", "H_{T, genjets}", 100, 0 , 1500));
+  Book( TH1F( "HT_genjets_ly", "H_{T, genjets}", 100, 0 , 1500));
   
 
+
+  Book( TH1F( "HT_lepton", "H_{T, lep}", 100, 0 , 1500));
+  Book( TH1F( "HT_lepton_ly", "H_{T, lep}", 100, 0 , 1500));
+  
+  Book( TH1F( "HT_lepton_met", "H_{T, lep+met}", 100, 0 , 1500));
+  Book( TH1F( "HT_lepton_met_ly", "H_{T, lep+met}", 100, 0 , 1500));
+  
+  Book( TH1F( "HT", "H_{T}", 100, 0 , 1500));
+  Book( TH1F( "HT_ly", "H_{T}", 100, 0 , 1500));
+  
+  Book( TH1F( "zhadreco", "chi Z_{had}", 100, 0 , 400));
+  Book( TH1F( "zlepeco", "chi Z_{lep}", 100, 0 , 400));
+  Book( TH1F( "zinvreco", "chi Z_{inv}", 100, 0 , 400));
+
+  Book( TH1F( "thadreco", "chi t_{had}", 100, 0 , 400));
+  Book( TH1F( "tlepreco", "chi t_{lep}", 100, 0 , 400));
+
+  Book( TH1F( "thadzlepreco", "chi t' -> Z_{lep}+t_{had}", 100, 0 , 1000));
+  Book( TH1F( "thadzhadreco", "chi t' -> Z_{had}+t_{had}", 100, 0 , 1000));
+  Book( TH1F( "tlepzlepreco", "chi t' -> Z_{lep}+t_{lep}", 100, 0 , 1000));
+  Book( TH1F( "tlepzhadreco", "chi t' -> Z_{had}+t_{lep}", 100, 0 , 1000));
+  Book( TH1F( "tlepzinvreco", "chi t' -> Z_{inv}+t_{lep}", 100, 0 , 1000));
+  Book( TH1F( "thadzinvreco", "chi t' -> Z_{inv}+t_{had}", 100, 0 , 1000));
 
 }
 
@@ -257,6 +269,59 @@ void GenJetsHists::Fill()
   
   Hist("HT")->Fill(fabs((sum_electron+sum_muon+sum_neutrino+sum_genjets).pt()),weight);
   Hist("HT_ly")->Fill(fabs((sum_electron+sum_muon+sum_neutrino+sum_genjets).pt()),weight);
+
+
+  double chi_z_lep = 99999;
+  double chi_t_lep = 99999;
+
+  double chi_z_had = 99999;
+  double chi_t_had = 99999;
+
+  double chi_z_inv = sum_neutrino.M()*sum_neutrino.M()/20;
+
+  for(unsigned int i=0; i<GenParZt.m_z_lep.size(); ++i){
+    double mass =GenParZt.m_z_lep.at(i).M();
+    double chi = (mass-91)*(mass-91)/30;
+    if(chi<chi_z_lep) chi_z_lep = chi;
+  }
+  
+  for(unsigned int i=0; i<GenParZt.m_t_lep.size(); ++i){
+    double mass =GenParZt.m_t_lep.at(i).M();
+    double chi = (mass-171)*(mass-171)/50;
+    if(chi<chi_t_lep) chi_t_lep = chi;
+  }
+
+  for(unsigned int i=0; i<GenParZt.m_had_combi.size(); ++i){
+    double mass =GenParZt.m_had_combi.at(i).M();
+    double chi_t = (mass-171)*(mass-171)/50;
+    double chi_z = (mass-91)*(mass-91)/30;
+    if(chi_z<chi_z_had) chi_z_had = chi_z;
+    if(chi_t<chi_t_had) chi_t_had = chi_t;
+  }
+
+
+
+  Hist("zhadreco")->Fill(chi_z_had,weight);
+  Hist("zlepeco" )->Fill(chi_z_lep,weight);
+  Hist("zinvreco")->Fill(chi_z_inv,weight);
+  Hist("thadreco")->Fill(chi_t_had,weight);
+  Hist("tlepreco")->Fill(chi_t_lep,weight);
+
+  Hist("thadzlepreco")->Fill(chi_t_had+chi_z_lep,weight);
+  Hist("thadzhadreco")->Fill(chi_t_had+chi_z_had,weight);
+  Hist("tlepzlepreco")->Fill(chi_t_lep+chi_z_lep,weight);
+  Hist("tlepzhadreco")->Fill(chi_t_lep+chi_z_had,weight);
+  Hist("tlepzinvreco")->Fill(chi_t_lep+chi_z_inv,weight);
+  Hist("thadzinvreco")->Fill(chi_t_had+chi_z_inv,weight);
+
+
+
+
+
+
+
+
+
   
 }
 

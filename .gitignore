@@ -2,6 +2,9 @@ obj/
 src/ExampleAnalysis_Dict.cxx
 src/ExampleAnalysis_Dict.h
 *~
+*.pyc
+*.swp
+*.swo
 .sframe*
 test/
 .#*

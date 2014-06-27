@@ -4,6 +4,7 @@
 #include "TLorentzVector.h"
 #include "SFrameTools/include/Objects.h"
 #include "SFrameTools/include/BaseCycleContainer.h"
+#include "include/Utils.h"
 
 
 class GenZt
@@ -24,7 +25,16 @@ class GenZt
   std::vector<GenParticle> VirW(){return m_virW;}
   std::vector<GenParticle> gluons(){return m_gluons;}
 
+  std::vector<LorentzVector> m_had_combi;
+  std::vector<LorentzVector> m_z_lep;
+  std::vector<LorentzVector> m_t_lep;
+
+
  private:
+
+  void Fill_z_lep();
+  void Fill_t_lep();
+
   std::vector<GenParticle> m_b;
   std::vector<GenParticle> m_neutrinos;
   std::vector<GenParticle> m_muons;

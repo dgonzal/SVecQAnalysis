@@ -77,4 +77,20 @@ class GenTopTag : public SelectionModule {
    
 };
 
+class GenNeutrino : public SelectionModule {
+ public:
+  GenNeutrino(int N_min, int N_max,double eta_max=10, double pt_min=20);
+  ~GenNeutrino(){};
+  
+  virtual bool pass(BaseCycleContainer*);
+  virtual std::string description();
+
+
+ private:
+  double m_pt_min;
+  double m_eta_max;
+  int m_N_min;
+  int m_N_max;
+};
+
 #endif

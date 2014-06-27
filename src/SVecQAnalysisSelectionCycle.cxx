@@ -80,8 +80,14 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
   AnalysisCycle::BeginInputData( id );
 
   // -------------------- set up the selections ---------------------------
-  //Selection* GenMHT = new Selection("GenMHT");
-  //GenMHT->addSelectionModule(new GenMissingHTSelection(50,50000000));
+  Selection* GenMHT = new Selection("GenMHT");
+  GenMHT->addSelectionModule(new GenMissingHTSelection(50,50000000));
+
+
+  Selection* GenNeutrinoSel = new Selection("GenNeutrinoSel");
+  GenNeutrinoSel->addSelectionModule(new GenNeutrino(3,50000,10,20));
+
+
 
   /*
   Selection* RecoZmass = new Selection("RecoZmass");
@@ -97,7 +103,13 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
 
   RegisterSelection(RecoZmass);
   */
-  //RegisterSelection(GenMHT);
+  
+
+
+  RegisterSelection(GenMHT);
+  RegisterSelection(GenNeutrinoSel);
+
+
   // ---------------- set up the histogram collections --------------------
 
   // histograms without any cuts
@@ -151,7 +163,15 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   // all thse BaseHists* vairables private member variables of SVecQAnalysisSelectionCycle and
   // setting them in BeginInputData. Then, there is no need here to call GetHistColletion ...
 
+  //static Selection* GenNeutrinoSel = GetSelection("GenNeutrinoSel");
+  //if(!GenNeutrinoSel->passSelection())  throw SError( SError::SkipEvent );
   
+  static Selection* GenMHT = GetSelection("GenMHT");
+  //static Selection* RecoZmass = GetSelection("RecoZmass");
+  if(!GenMHT->passSelection())  throw SError( SError::SkipEvent );
+  //if(!RecoZmass->passSelection())  throw SError( SError::SkipEvent );
+
+
   BaseHists* Jets = GetHistCollection("Jets");
   BaseHists* Event = GetHistCollection("Event");
   BaseHists* Muon = GetHistCollection("Muon");
@@ -171,10 +191,14 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   BaseHists* gen_virW      = GetHistCollection("gen_virW"     );
   BaseHists* gen_gluon     = GetHistCollection("gen_gluon"    );
 
-  //static Selection* GenMHT = GetSelection("GenMHT");
-  //static Selection* RecoZmass = GetSelection("RecoZmass");
-  //if(!GenMHT->passSelection())  throw SError( SError::SkipEvent );
-  //if(!RecoZmass->passSelection())  throw SError( SError::SkipEvent );
+
+  
+
+ 
+
+  
+
+
 
   genjets       ->Fill();  
   gen_lquarks   ->Fill();  

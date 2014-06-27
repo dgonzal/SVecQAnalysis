@@ -85,8 +85,9 @@ void SVecQAnalysisPreSelectionCycle::BeginInputData( const SInputData& id ) thro
   else if(m_GenLepton_Selection=="0Lepton"){
     NLepton_max = 0;
     NLepton_min = 0;
-    preselection->addSelectionModule(new GenTopTag());
-  }
+    //preselection->addSelectionModule(new GenTopTag());
+    preselection->addSelectionModule(new NCMSTopTagSelection(1,10000));	
+ }
   else
     cerr<<"No existing Lepton Selection choosen"<<" "<<" "<< NLepton_max<<" "<<NLepton_min<<endl;
 /*	
@@ -106,8 +107,7 @@ void SVecQAnalysisPreSelectionCycle::BeginInputData( const SInputData& id ) thro
   // ---------------- set up the histogram collections --------------------
 
   // histograms without any cuts
-  
-
+ 
   InitHistos();
 
 }
@@ -148,19 +148,22 @@ void SVecQAnalysisPreSelectionCycle::ExecuteEvent( const SInputData& id, Double_
   Cleaner cleaner;
   static Selection* preselection = GetSelection("preselection");
 
+  
   if(bcc->muons) cleaner.MuonCleaner_noIso(40,2.1);
   if(bcc->electrons) cleaner.ElectronCleaner_noIso(40,2.4);
   if(bcc->jets) cleaner.JetLeptonSubtractor(m_corrector,false);
   if(!bcc->isRealData && bcc->jets) cleaner.JetEnergyResolutionShifter();
   if(bcc->jets) cleaner.JetCleaner(50,2.4,true);
-
+  
   
 
   if(!preselection->passSelection())  throw SError( SError::SkipEvent );
 
+  //cout<<"got through the event"<<endl;
   
   WriteOutputTree();
 
+  //cout<<"wrote the event"<<endl;
 
   return;
   

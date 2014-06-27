@@ -17,6 +17,8 @@ bool GenLeptonSelection::pass(BaseCycleContainer* bcc)
   //int nlepton = GenParZt.muons().size() + GenParZt.electrons().size();
   //cout<<"Muon: " <<GenParZt.muons().size()<< "  Elec: "<<GenParZt.electrons().size() <<endl;
  
+
+
   int muon =0;
   int electron =0;
   for(unsigned int i=0;i<GenParZt.muons().size(); i++ ){
@@ -28,11 +30,17 @@ bool GenLeptonSelection::pass(BaseCycleContainer* bcc)
       electron +=1;
   }
 
+
+ 
+
   int nlepton = electron+muon;
 
-  if(nlepton <= m_NLepton_max && nlepton >= m_NLepton_min)
+  if(nlepton <= m_NLepton_max && nlepton >= m_NLepton_min){
     return true;
-  
+  }
+
+
+
   return false;
 }
 
@@ -56,7 +64,8 @@ GenMissingHTSelection::GenMissingHTSelection(double min, double max)
 bool GenMissingHTSelection::pass(BaseCycleContainer* bcc)
 {
   GenZt GenParZt(bcc);
-  LorentzVector missingHT;
+  LorentzVector missingHT(0,0,0,0);
+
 
   for(unsigned int i=0;i<GenParZt.neutrinos().size(); i++ ){
     missingHT += GenParZt.neutrinos().at(i).v4();
@@ -215,6 +224,44 @@ std::string GenTopTag::description()
 {
     char s[100];
     sprintf(s, "CMSTopTag");
+
+    return s;
+}
+
+GenNeutrino::GenNeutrino(int N_min, int N_max,double eta_max, double pt_min)
+{
+  m_N_min = N_min;
+  m_N_max = N_max;
+  m_eta_max=eta_max; 
+  m_pt_min= pt_min;
+}
+
+bool GenNeutrino::pass(BaseCycleContainer* bcc)
+{
+  
+  GenZt GenParZt(bcc);
+ 
+  
+  int neutrino =0;
+  for(unsigned int i=0;i<GenParZt.neutrinos().size(); i++ ){
+    if(GenParZt.neutrinos().at(i).pt()>m_pt_min && GenParZt.neutrinos().at(i).eta()<m_eta_max)
+      neutrino +=1;
+  }
+
+  if(neutrino <= m_N_max && neutrino >= m_N_min){
+    return true;
+  }
+  
+
+  return false;
+
+
+}
+
+std::string GenNeutrino::description()
+{
+    char s[100];
+    sprintf(s,"%d <= N Neutrinos <= %d",m_N_min, m_N_max);
 
     return s;
 }

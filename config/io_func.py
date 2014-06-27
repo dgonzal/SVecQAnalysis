@@ -271,7 +271,7 @@ if header.Version[0] == "-1":
                         rootCounter +=1 
                     else:
                          missing.write(cycle.OutputDirectory+'test/'+cycle.Cyclename+'.'+data_type[i]+'.'+names[i]+'_'+str(it)+'.root\n')
-			 if resubmit_flag: resubmit('test/Stream_'+str(header.Version[0]),names[i]+'_'+str(it))
+			 if resubmit_flag: resubmit('test/Stream_'+names[i],names[i]+'_'+str(it+1))
                 
 
                 tot_prog += rootCounter
@@ -287,7 +287,7 @@ if header.Version[0] == "-1":
 	    del_list.sort(reverse=True)		
             
             for m in del_list:
-		#add_histos(cycle.OutputDirectory,cycle.Cyclename+'.'+data_type[m]+'.'+names[m],NFiles[m])
+		add_histos(cycle.OutputDirectory,cycle.Cyclename+'.'+data_type[m]+'.'+names[m],NFiles[m])
                 del NFiles[m]
                 del names[m]
                 del data_type[m]
