@@ -4,6 +4,20 @@
 #include "SFrameAnalysis/include/SelectionModules.h"
 #include "include/GenZt.h"
 
+class relIsoMu : public SelectionModule {
+ public:
+  relIsoMu(double relIso);
+  ~relIsoMu(){};
+
+   virtual bool pass(BaseCycleContainer*);
+   virtual std::string description();
+
+
+ private:
+   double m_relIso;
+};
+
+
 
 class GenLeptonSelection: public SelectionModule {
  public:
@@ -47,6 +61,20 @@ class hadZmass: public SelectionModule {
  private:
    double m_max;
    double m_min;
+};
+
+class NSumLepSel: public SelectionModule {
+  public:
+	NSumLepSel(int min, int max);
+	~NSumLepSel(){};
+
+
+   virtual bool pass(BaseCycleContainer*);
+   virtual std::string description();
+
+  private:
+	int m_min;
+	int m_max;
 };
 
 class lepZmass: public SelectionModule {

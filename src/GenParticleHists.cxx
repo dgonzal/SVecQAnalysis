@@ -96,43 +96,45 @@ void GenParticleHists::Fill()
 
   BaseCycleContainer* bcc = calc->GetBaseCycleContainer();
   
-  GenZt GenParZt(bcc);
+  //GenZt GenParZt= calc->Gen_Zt;
   std::vector<GenParticle> Particle;
+
+  //cout<<"NTop: "<<calc->Gen_Zt.Top().size()<<endl;
 
   switch(m_partn)
     {
     case l:
-      Particle=GenParZt.lquarks();
+      Particle=calc->Gen_Zt.lquarks();
       break;
     case b:
-      Particle=GenParZt.b();
+      Particle=calc->Gen_Zt.b();
       break;
     case top:        
-      Particle=GenParZt.Top();
+      Particle=calc->Gen_Zt.Top();
       break;
     case tprime:      
-      Particle=GenParZt.Tprime();
+      Particle=calc->Gen_Zt.Tprime();
       break;
     case electron:   
-      Particle=GenParZt.electrons();
+      Particle=calc->Gen_Zt.electrons();
       break;
     case muon:
-      Particle=GenParZt.muons();
+      Particle=calc->Gen_Zt.muons();
       break;
     case neutrino:    
-      Particle=GenParZt.neutrinos();
+      Particle=calc->Gen_Zt.neutrinos();
       break;
     case Z:
-      Particle= GenParZt.Z();
+      Particle= calc->Gen_Zt.Z();
       break;
     case W:        
-      Particle=GenParZt.WTop();
+      Particle=calc->Gen_Zt.WTop();
       break;   
     case VirW:
-      Particle=GenParZt.VirW();
+      Particle=calc->Gen_Zt.VirW();
       break;
     case gluon:
-      Particle=GenParZt.gluons();
+      Particle=calc->Gen_Zt.gluons();
       break;
     }
 

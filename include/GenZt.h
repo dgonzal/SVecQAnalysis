@@ -10,7 +10,7 @@
 class GenZt
 {
  public:
-  GenZt(BaseCycleContainer* bcc);
+  GenZt();
   ~GenZt();
    
   std::vector<GenParticle> Tprime(){return m_Tprime;}
@@ -28,6 +28,10 @@ class GenZt
   std::vector<LorentzVector> m_had_combi;
   std::vector<LorentzVector> m_z_lep;
   std::vector<LorentzVector> m_t_lep;
+
+
+  void identify(BaseCycleContainer* bcc);
+  void reset();
 
 
  private:

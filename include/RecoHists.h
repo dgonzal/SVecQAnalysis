@@ -1,5 +1,5 @@
-#ifndef ZHists_H
-#define ZHists_H
+#ifndef RecoHists_H
+#define RecoHists_H
 
 #include "SFrameTools/include/BaseHists.h"
 #include "SFrameTools/include/Objects.h"
@@ -24,14 +24,14 @@
 
 
 
-class ZHists : public BaseHists {
+class RecoHists : public BaseHists {
 
  public:
   /// Named constructor
-  ZHists(const char* name);
+  RecoHists(const char* name);
   
   /// Default destructor
-  ~ZHists();
+  ~RecoHists();
   
   void Init();
   
@@ -44,7 +44,7 @@ class ZHists : public BaseHists {
  
   
   
-}; // class ZHists
+}; // class RecoHists
 
 
-#endif // ZHists_H
+#endif // RecoHists_H

@@ -247,7 +247,7 @@ if header.Version[0] == "-1":
             write_script(header.Version[0])
             #submitt_qsub(NFiles[len(NFiles)-1],'test/Stream_'+str(header.Version[0]),str(header.Version[0]))
 
-   	resubmit_flag = 1
+   	resubmit_flag =1 
 
         while loop_check==True:   
             if len(names)==0: 

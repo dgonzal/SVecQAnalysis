@@ -29,22 +29,39 @@ vector<LorentzVector> Fill_had_combi(const vector<Particle> & jets){
   return result;
 }
 
-GenZt::GenZt(BaseCycleContainer* bcc){
-  
+GenZt::GenZt(){
+}
 
+GenZt::~GenZt(){
+  // default destructor, does nothing
+}
 
+void GenZt::reset(){
+  m_Top.clear();
+  m_b.clear();
+  m_neutrinos.clear();
+  m_muons.clear();
+  m_electron.clear();
+  m_WTop.clear();
+  m_Z.clear();
+  m_Tprime.clear();
+  m_lquarks.clear();
+  m_virW.clear();
+  m_gluons.clear();
+}
+
+void GenZt::identify(BaseCycleContainer* bcc){
   //std::cout<<"---------------------------"<<std::endl;
 
   for(unsigned int i=0; i<bcc->genparticles->size(); ++i)
     {
       GenParticle genp = bcc->genparticles->at(i);
       
-      
-
-
+    
       //if(genp.pt()<20) continue;
       //std::cout<<"GenParticle pdgId: "<<genp.pdgId()<<" status: "<<genp.status() <<std::endl;
       //std::cout<<"GenParticle pdgId: "<<genp.pdgId()<<std::endl;
+      //std::cout<<"---------------------------"<<std::endl;
 
       switch(genp.pdgId())
 	{ 
@@ -116,14 +133,6 @@ GenZt::GenZt(BaseCycleContainer* bcc){
   if(m_muons.size()>0) sort(m_muons.begin(),m_muons.end(),HigherPt());
   if(m_neutrinos.size()>0) sort(m_neutrinos.begin(),m_neutrinos.end(),HigherPt());
 
-  //Fill_z_lep();
-  //Fill_t_lep();
-  //m_had_combi = Fill_had_combi(*bcc->genjets);
-
-}
-
-GenZt::~GenZt(){
-  // default destructor, does nothing
 }
 
 

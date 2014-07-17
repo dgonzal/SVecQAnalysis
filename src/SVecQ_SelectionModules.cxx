@@ -1,5 +1,55 @@
 #include "include/SVecQ_SelectionModules.h"
 
+relIsoMu::relIsoMu(double relIso){
+  m_relIso = relIso;
+}
+
+bool relIsoMu::pass(BaseCycleContainer* bcc){
+
+  if(bcc->muons->size()>0)
+    if(relIsoMuon(bcc->muons->at(0),0.4)<m_relIso) return true;
+  
+  if(bcc->muons->size()>1)
+    if(relIsoMuon(bcc->muons->at(1),0.4)<m_relIso) return true;
+  return false;
+}
+
+std::string relIsoMu::description()
+{
+    char s[100];
+    sprintf(s, "relIso Muon <= %f",m_relIso);
+
+    return s;
+}
+
+
+
+NSumLepSel::NSumLepSel(int min, int max)
+{
+	m_min = min;
+	m_max = max;
+}
+bool NSumLepSel::pass(BaseCycleContainer* bcc){
+
+ int size_ele = bcc->electrons->size();
+ int size_muon = bcc->muons->size();
+
+ int size = size_ele+size_muon;
+
+ if(size>=m_min && size<=m_max)
+	return true;
+
+ return false;	 
+
+}
+
+std::string NSumLepSel::description()
+{
+    char s[100];
+    sprintf(s, "%d <= NLepton <= %d",m_min, m_max);
+
+    return s;
+}
 
 GenLeptonSelection::GenLeptonSelection(int NLepton_min, int NLepton_max, double eta_max, double pt_min)
 {
@@ -12,7 +62,9 @@ GenLeptonSelection::GenLeptonSelection(int NLepton_min, int NLepton_max, double 
 
 bool GenLeptonSelection::pass(BaseCycleContainer* bcc)
 {
-  GenZt GenParZt(bcc);
+
+  EventCalc* calc = EventCalc::Instance();
+  GenZt GenParZt= calc->Gen_Zt;
   
   //int nlepton = GenParZt.muons().size() + GenParZt.electrons().size();
   //cout<<"Muon: " <<GenParZt.muons().size()<< "  Elec: "<<GenParZt.electrons().size() <<endl;
@@ -53,7 +105,6 @@ std::string GenLeptonSelection::description()
     return s;
 }
 
-
 GenMissingHTSelection::GenMissingHTSelection(double min, double max)
 {
   m_min=min;
@@ -63,7 +114,8 @@ GenMissingHTSelection::GenMissingHTSelection(double min, double max)
 
 bool GenMissingHTSelection::pass(BaseCycleContainer* bcc)
 {
-  GenZt GenParZt(bcc);
+  EventCalc* calc = EventCalc::Instance();
+  GenZt GenParZt= calc->Gen_Zt;
   LorentzVector missingHT(0,0,0,0);
 
 
@@ -238,10 +290,9 @@ GenNeutrino::GenNeutrino(int N_min, int N_max,double eta_max, double pt_min)
 
 bool GenNeutrino::pass(BaseCycleContainer* bcc)
 {
-  
-  GenZt GenParZt(bcc);
- 
-  
+  EventCalc* calc = EventCalc::Instance();
+  GenZt GenParZt= calc->Gen_Zt;
+   
   int neutrino =0;
   for(unsigned int i=0;i<GenParZt.neutrinos().size(); i++ ){
     if(GenParZt.neutrinos().at(i).pt()>m_pt_min && GenParZt.neutrinos().at(i).eta()<m_eta_max)

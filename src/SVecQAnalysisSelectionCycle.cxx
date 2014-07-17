@@ -17,6 +17,8 @@ using namespace std;
 #include "SFrameAnalysis/include/JetHists.h"
 #include "SFrameAnalysis/include/MuonHists.h"
 #include "SFrameAnalysis/include/ElectronHists.h"
+#include "include/RecoHists.h"
+
 #include "include/GenParticleHists.h"
 #include "include/GenJetsHists.h"
 
@@ -34,7 +36,7 @@ SVecQAnalysisSelectionCycle::SVecQAnalysisSelectionCycle()
   // constructor, declare additional variables that should be 
   // obtained from the steering-xml file
   
-  DeclareProperty( "Lepton_Selection", m_Lepton_Selection );
+  DeclareProperty("Lepton_Selection", m_Lepton_Selection );
 
   // set the integrated luminosity per bin for the lumi-yield control plots
   SetIntLumiPerBin(500.);
@@ -80,45 +82,102 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
   AnalysisCycle::BeginInputData( id );
 
   // -------------------- set up the selections ---------------------------
-  Selection* GenMHT = new Selection("GenMHT");
-  GenMHT->addSelectionModule(new GenMissingHTSelection(50,50000000));
 
 
-  Selection* GenNeutrinoSel = new Selection("GenNeutrinoSel");
-  GenNeutrinoSel->addSelectionModule(new GenNeutrino(3,50000,10,20));
-
-
-
-  /*
-  Selection* RecoZmass = new Selection("RecoZmass");
-
-  if(m_Lepton_Selection=="1Lepton"||m_Lepton_Selection=="0Lepton"){
-    RecoZmass->addSelectionModule(new hadZmass(80,120));
+  Selection* HTSel = new Selection("HTSel");
+  //HTSel->addSelectionModule(new METCut(50,999999));
+  if( m_Lepton_Selection=="2Lepton"){
+    HTSel->addSelectionModule(new METCut(150,999999));
+    HTSel->addSelectionModule(new HTCut(200));
+    HTSel->addSelectionModule(new HTlepCut(200,999999));
   }
-  else if (m_Lepton_Selection=="2Lepton"||m_Lepton_Selection=="3Lepton"){
-    RecoZmass->addSelectionModule(new lepZmass(80,120));
-  }
-  else
-    cout<<"no Z mass cut applied"<<endl;
 
-  RegisterSelection(RecoZmass);
-  */
+  Selection* NJetSel = new Selection("NJetSel");
+  if( m_Lepton_Selection=="2Lepton")
+    NJetSel->addSelectionModule(new NJetSelection(2,int_infinity(),50));
+  if( m_Lepton_Selection=="1Lepton")
+    NJetSel->addSelectionModule(new NJetSelection(3,int_infinity(),50));
+
+  if( m_Lepton_Selection=="2Lepton" || m_Lepton_Selection=="0Lepton" || m_Lepton_Selection=="1Lepton"){
+    NJetSel->addSelectionModule(new NJetSelection(1,int_infinity(),150));
+    //NJetSel->addSelectionModule(new TwoDCut());
+    //NJetSel->addSelectionModule(new NPrimaryVertexSelection(1)); //at least one good PV
+  }
+
+
+  Selection* MuonSel = new Selection("MuonSel");
+  if( m_Lepton_Selection=="2Lepton"|| m_Lepton_Selection=="3Lepton"){
+    MuonSel->addSelectionModule(new NMuonSelection(2,1000,30));
+    MuonSel->addSelectionModule(new NMuonSelection(2,2,20));
+    MuonSel->addSelectionModule(new NMuonSelection(1,2,45));
+    MuonSel->addSelectionModule(new relIsoMu(0.15));
+  }
+
+  Selection* EleSel = new Selection("EleSel");
+  if( m_Lepton_Selection=="2Lepton"|| m_Lepton_Selection=="3Lepton"){
+    EleSel->addSelectionModule(new NElectronSelection(2,1000,30));
+    EleSel->addSelectionModule(new NElectronSelection(2,2,20));
+    EleSel->addSelectionModule(new NElectronSelection(1,2,45));
+    //EleSel->addSelectionModule(new TriggerSelection("HLT_Ele30_CaloIdVT_TrkIdT_PFNoPUJet100_PFNoPUJet25_v"));
+  }
+
+  Selection* Muon1Sel = new Selection("Muon1Sel");
+  if( m_Lepton_Selection=="2Lepton") Muon1Sel->addSelectionModule(new NMuonSelection(1,1,20));
+
+  Selection* Ele1Sel = new Selection("Ele1Sel");
+  if( m_Lepton_Selection=="2Lepton") Ele1Sel->addSelectionModule(new NElectronSelection(1,1,20));
+
+  Selection* cmsTopTagSel = new Selection("cmsTopTagSel");
+  cmsTopTagSel->addSelectionModule(new NCMSTopTagSelection(1,1));
+
+  Selection* bTagSel = new Selection("bTagSel");
+  bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVM));
+
+  Selection* nsubjettiness = new Selection("nsubjettiness");
+  //nsubjettiness->addSelectionModule(new );
+
   
-
-
-  RegisterSelection(GenMHT);
-  RegisterSelection(GenNeutrinoSel);
-
+  RegisterSelection(HTSel);
+  RegisterSelection(NJetSel);
+  RegisterSelection(MuonSel);
+  RegisterSelection(EleSel);
+  RegisterSelection(Muon1Sel);
+  RegisterSelection(Ele1Sel);
+  RegisterSelection(bTagSel);
+  RegisterSelection(cmsTopTagSel);
+  RegisterSelection(nsubjettiness);
 
   // ---------------- set up the histogram collections --------------------
 
-  // histograms without any cuts
- 
+  
   RegisterHistCollection( new JetHists("Jets") );
   RegisterHistCollection( new EventHists("Event") );
   RegisterHistCollection( new MuonHists("Muon") );
   RegisterHistCollection( new ElectronHists("Electron") );
+  RegisterHistCollection( new RecoHists("RecoZt") );
+ 
+  //Histograms with CMS Top Tag
+  RegisterHistCollection( new JetHists("cmsTopTag_Jets") );
+  RegisterHistCollection( new EventHists("cmsTopTag_Event") );
+  RegisterHistCollection( new MuonHists("cmsTopTag_Muon") );
+  RegisterHistCollection( new ElectronHists("cmsTopTag_Electron") );
+  RegisterHistCollection( new RecoHists("cmsTopTag_RecoZt") );
 
+  //Histograms with b-Tag
+  RegisterHistCollection( new JetHists("bTag_Jets") );
+  RegisterHistCollection( new EventHists("bTag_Event") );
+  RegisterHistCollection( new MuonHists("bTag_Muon") );
+  RegisterHistCollection( new ElectronHists("bTag_Electron") );
+  RegisterHistCollection( new RecoHists("bTag_RecoZt") );
+
+  //Histograms with N-Subjettiness
+  RegisterHistCollection( new JetHists("nsubjettiness_Jets") );
+  RegisterHistCollection( new EventHists("nsubjettiness_Event") );
+  RegisterHistCollection( new MuonHists("nsubjettiness_Muon") );
+  RegisterHistCollection( new ElectronHists("nsubjettiness_Electron") );
+  RegisterHistCollection( new RecoHists("nsubjettiness_RecoZt") );
+
+  //Generator Histograms
   RegisterHistCollection( new GenJetsHists("genjets"));
   RegisterHistCollection( new GenParticleHists("gen_lquarks"  ,GenParticleHists::l));
   RegisterHistCollection( new GenParticleHists("gen_bquarks"  ,GenParticleHists::b));
@@ -163,20 +222,99 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   // all thse BaseHists* vairables private member variables of SVecQAnalysisSelectionCycle and
   // setting them in BeginInputData. Then, there is no need here to call GetHistColletion ...
 
-  //static Selection* GenNeutrinoSel = GetSelection("GenNeutrinoSel");
-  //if(!GenNeutrinoSel->passSelection())  throw SError( SError::SkipEvent );
-  
-  static Selection* GenMHT = GetSelection("GenMHT");
-  //static Selection* RecoZmass = GetSelection("RecoZmass");
-  if(!GenMHT->passSelection())  throw SError( SError::SkipEvent );
-  //if(!RecoZmass->passSelection())  throw SError( SError::SkipEvent );
+  static Selection* HTSel = GetSelection("HTSel");
+  static Selection* NJetSel = GetSelection("NJetSel");
+  static Selection* MuonSel = GetSelection("MuonSel");
+  static Selection* EleSel = GetSelection("EleSel");
+  static Selection* Muon1Sel = GetSelection("Muon1Sel");
+  static Selection* Ele1Sel = GetSelection("Ele1Sel");
+  static Selection* cmsTopTagSel = GetSelection("cmsTopTagSel");
+  static Selection* bTagSel = GetSelection("bTagSel");
+  static Selection* nsubjettiness = GetSelection("nsubjettiness");
 
+  if(!HTSel->passSelection())  throw SError( SError::SkipEvent );
+  if(!NJetSel->passSelection())  throw SError( SError::SkipEvent );
+  if(!MuonSel->passSelection() && !EleSel->passSelection())  throw SError( SError::SkipEvent );
+  if( m_Lepton_Selection=="2Lepton") 
+    if(Muon1Sel->passSelection() || Ele1Sel->passSelection())  throw SError( SError::SkipEvent );
+
+
+
+  EventCalc* calc = EventCalc::Instance();
+  BaseCycleContainer* bcc = calc->GetBaseCycleContainer();
+  
+ 
 
   BaseHists* Jets = GetHistCollection("Jets");
   BaseHists* Event = GetHistCollection("Event");
   BaseHists* Muon = GetHistCollection("Muon");
   BaseHists* Electron = GetHistCollection("Electron");
+  BaseHists* RecoZt = GetHistCollection("RecoZt");
   
+  BaseHists* bTag_Jets = GetHistCollection("bTag_Jets");
+  BaseHists* bTag_Event = GetHistCollection("bTag_Event");
+  BaseHists* bTag_Muon = GetHistCollection("bTag_Muon");
+  BaseHists* bTag_Electron = GetHistCollection("bTag_Electron");
+  BaseHists* bTag_RecoZt = GetHistCollection("bTag_RecoZt");
+
+  BaseHists* cmsTopTag_Jets = GetHistCollection("cmsTopTag_Jets");
+  BaseHists* cmsTopTag_Event = GetHistCollection("cmsTopTag_Event");
+  BaseHists* cmsTopTag_Muon = GetHistCollection("cmsTopTag_Muon");
+  BaseHists* cmsTopTag_Electron = GetHistCollection("cmsTopTag_Electron");
+  BaseHists* cmsTopTag_RecoZt = GetHistCollection("cmsTopTag_RecoZt");
+
+  BaseHists* nsubjettiness_Jets = GetHistCollection("nsubjettiness_Jets");
+  BaseHists* nsubjettiness_Event = GetHistCollection("nsubjettiness_Event");
+  BaseHists* nsubjettiness_Muon = GetHistCollection("nsubjettiness_Muon");
+  BaseHists* nsubjettiness_Electron = GetHistCollection("nsubjettiness_Electron");
+  BaseHists* nsubjettiness_RecoZt = GetHistCollection("nsubjettiness_RecoZt");
+
+  // start the analysis
+
+  //cout<<m_Lepton_Selection<<endl;
+  if( m_Lepton_Selection=="1Lepton")
+    calc->Reco_Zt.Fill_1_lep(*bcc->jets,*bcc->muons,*bcc->electrons, bcc->met->v4());
+  if( m_Lepton_Selection=="2Lepton")
+    calc->Reco_Zt.Fill_2_lep(*bcc->jets,*bcc->muons,*bcc->electrons);
+  if( m_Lepton_Selection=="3Lepton")
+    calc->Reco_Zt.Fill_3_lep(*bcc->jets,*bcc->muons,*bcc->electrons, bcc->met->v4());
+  if( m_Lepton_Selection=="0Lepton")
+    calc->Reco_Zt.Fill_had_combi(*bcc->jets, bcc->met);
+
+
+  RecoZt->Fill();
+  Jets->Fill();
+  Event->Fill();
+  Muon->Fill();
+  Electron->Fill();
+
+ if(bTagSel->passSelection()){ 
+  bTag_RecoZt->Fill();
+  bTag_Jets->Fill();
+  bTag_Event->Fill();
+  bTag_Muon->Fill();
+  bTag_Electron->Fill();
+}
+ if(cmsTopTagSel->passSelection()){ 
+  cmsTopTag_Jets->Fill();
+  cmsTopTag_Event->Fill();
+  cmsTopTag_Muon->Fill();
+  cmsTopTag_Electron->Fill();
+  cmsTopTag_RecoZt->Fill();
+}
+ if(nsubjettiness->passSelection()){ 
+  nsubjettiness_RecoZt->Fill();
+  nsubjettiness_Jets->Fill();
+  nsubjettiness_Event->Fill();
+  nsubjettiness_Muon->Fill();
+  nsubjettiness_Electron->Fill();
+}
+  //return;
+
+  if(bcc->isRealData)  throw SError( SError::SkipEvent );
+  
+
+  calc->Gen_Zt.identify(bcc);
 
   BaseHists* genjets   = GetHistCollection("genjets"  );
   BaseHists* gen_lquarks   = GetHistCollection("gen_lquarks"  );
@@ -191,15 +329,6 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   BaseHists* gen_virW      = GetHistCollection("gen_virW"     );
   BaseHists* gen_gluon     = GetHistCollection("gen_gluon"    );
 
-
-  
-
- 
-
-  
-
-
-
   genjets       ->Fill();  
   gen_lquarks   ->Fill();  
   gen_bquarks   ->Fill(); 
@@ -212,15 +341,6 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   gen_wboson    ->Fill();
   gen_virW      ->Fill();  
   gen_gluon     ->Fill();  
-
-  // start the analysis
-
-  Jets->Fill();
-  Event->Fill();
-  Muon->Fill();
-  Electron->Fill();
-
- 
   
   return;
   

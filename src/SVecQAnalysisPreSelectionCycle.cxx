@@ -96,7 +96,8 @@ void SVecQAnalysisPreSelectionCycle::BeginInputData( const SInputData& id ) thro
 */
   //cout<<NLepton_max<<" "<<NLepton_min<<endl;
 
-  preselection->addSelectionModule(new GenLeptonSelection(NLepton_min, NLepton_max,2.5,40));
+  //preselection->addSelectionModule(new GenLeptonSelection(NLepton_min, NLepton_max,2.5,40));
+  preselection->addSelectionModule(new NSumLepSel(NLepton_min, NLepton_max));
 
   RegisterSelection(preselection);
 
@@ -149,7 +150,7 @@ void SVecQAnalysisPreSelectionCycle::ExecuteEvent( const SInputData& id, Double_
   static Selection* preselection = GetSelection("preselection");
 
   
-  if(bcc->muons) cleaner.MuonCleaner_noIso(40,2.1);
+  if(bcc->muons) cleaner.MuonCleaner_noIso(30,2.1);
   if(bcc->electrons) cleaner.ElectronCleaner_noIso(40,2.4);
   if(bcc->jets) cleaner.JetLeptonSubtractor(m_corrector,false);
   if(!bcc->isRealData && bcc->jets) cleaner.JetEnergyResolutionShifter();

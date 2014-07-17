@@ -141,10 +141,8 @@ void GenJetsHists::Fill()
 
   BaseCycleContainer* bcc = calc->GetBaseCycleContainer();
   
-  GenZt GenParZt(bcc);
+  //GenZt GenParZt = calc->Gen_Zt;
   std::vector<Particle>* Particles= bcc->genjets;
-
- 
 
   // important: get the event weight
   double weight = calc->GetWeight();
@@ -225,20 +223,20 @@ void GenJetsHists::Fill()
   LorentzVector sum_l;
   LorentzVector sum_genjets;
   
-  for(unsigned int i=0; i < GenParZt.electrons().size(); ++i)
-    sum_electron = sum_electron+GenParZt.electrons().at(i).v4();
+  for(unsigned int i=0; i < calc->Gen_Zt.electrons().size(); ++i)
+    sum_electron = sum_electron+calc->Gen_Zt.electrons().at(i).v4();
   
-  for(unsigned int i=0; i < GenParZt.muons().size(); ++i)
-    sum_muon += GenParZt.muons().at(i).v4();
+  for(unsigned int i=0; i < calc->Gen_Zt.muons().size(); ++i)
+    sum_muon += calc->Gen_Zt.muons().at(i).v4();
   
-  for(unsigned int i=0; i < GenParZt.neutrinos().size(); ++i)
-    sum_neutrino = sum_neutrino+GenParZt.neutrinos().at(i).v4();
+  for(unsigned int i=0; i < calc->Gen_Zt.neutrinos().size(); ++i)
+    sum_neutrino = sum_neutrino+calc->Gen_Zt.neutrinos().at(i).v4();
   
-  for(unsigned int i=0; i < GenParZt.lquarks().size(); ++i)
-    sum_l = sum_l+GenParZt.lquarks().at(i).v4();
+  for(unsigned int i=0; i < calc->Gen_Zt.lquarks().size(); ++i)
+    sum_l = sum_l+calc->Gen_Zt.lquarks().at(i).v4();
   
-  for(unsigned int i=0; i < GenParZt.b().size(); ++i)
-    sum_b = sum_b+GenParZt.b().at(i).v4();
+  for(unsigned int i=0; i < calc->Gen_Zt.b().size(); ++i)
+    sum_b = sum_b+calc->Gen_Zt.b().at(i).v4();
   
   for(unsigned int i=0; i < bcc->genjets->size(); ++i)
     sum_genjets = sum_genjets+bcc->genjets->at(i).v4();
@@ -279,20 +277,20 @@ void GenJetsHists::Fill()
 
   double chi_z_inv = sum_neutrino.M()*sum_neutrino.M()/20;
 
-  for(unsigned int i=0; i<GenParZt.m_z_lep.size(); ++i){
-    double mass =GenParZt.m_z_lep.at(i).M();
+  for(unsigned int i=0; i<calc->Gen_Zt.m_z_lep.size(); ++i){
+    double mass =calc->Gen_Zt.m_z_lep.at(i).M();
     double chi = (mass-91)*(mass-91)/30;
     if(chi<chi_z_lep) chi_z_lep = chi;
   }
   
-  for(unsigned int i=0; i<GenParZt.m_t_lep.size(); ++i){
-    double mass =GenParZt.m_t_lep.at(i).M();
+  for(unsigned int i=0; i<calc->Gen_Zt.m_t_lep.size(); ++i){
+    double mass =calc->Gen_Zt.m_t_lep.at(i).M();
     double chi = (mass-171)*(mass-171)/50;
     if(chi<chi_t_lep) chi_t_lep = chi;
   }
 
-  for(unsigned int i=0; i<GenParZt.m_had_combi.size(); ++i){
-    double mass =GenParZt.m_had_combi.at(i).M();
+  for(unsigned int i=0; i<calc->Gen_Zt.m_had_combi.size(); ++i){
+    double mass =calc->Gen_Zt.m_had_combi.at(i).M();
     double chi_t = (mass-171)*(mass-171)/50;
     double chi_z = (mass-91)*(mass-91)/30;
     if(chi_z<chi_z_had) chi_z_had = chi_z;

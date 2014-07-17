@@ -34,6 +34,7 @@ extern void G__set_cpp_environmentSVecQAnalysis_Dict();
 #include "include/GenJetsHists.h"
 #include "include/GenParticleHists.h"
 #include "include/GenZt.h"
+#include "include/RecoHists.h"
 #include "include/RecoZt.h"
 #include "include/SVecQAnalysisCycle.h"
 #include "include/SVecQAnalysisCycleNew.h"
@@ -43,7 +44,6 @@ extern void G__set_cpp_environmentSVecQAnalysis_Dict();
 #include "include/SVecQAnalysisSelectionCycle.h"
 #include "include/SVecQ_SelectionModules.h"
 #include "include/TestModule.h"
-#include "include/ZHists.h"
 #include "include/tprimeReco.h"
 #include <algorithm>
 namespace std { }
