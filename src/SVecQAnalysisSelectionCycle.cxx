@@ -85,20 +85,25 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
 
 
   Selection* HTSel = new Selection("HTSel");
-  //HTSel->addSelectionModule(new METCut(50,999999));
   if( m_Lepton_Selection=="2Lepton"){
     HTSel->addSelectionModule(new METCut(150,999999));
     HTSel->addSelectionModule(new HTCut(200));
     HTSel->addSelectionModule(new HTlepCut(200,999999));
+  }
+  else if(m_Lepton_Selection =="0Lepton_inv"){
+    HTSel->addSelectionModule(new METCut(250,999999));
+  }
+  else if(m_Lepton_Selection =="0Lepton"){
+    HTSel->addSelectionModule(new METCut(0,250));
   }
 
   Selection* NJetSel = new Selection("NJetSel");
   if( m_Lepton_Selection=="2Lepton")
     NJetSel->addSelectionModule(new NJetSelection(2,int_infinity(),50));
   if( m_Lepton_Selection=="1Lepton")
-    NJetSel->addSelectionModule(new NJetSelection(3,int_infinity(),50));
+    NJetSel->addSelectionModule(new NJetSelection(2,int_infinity(),50));
 
-  if( m_Lepton_Selection=="2Lepton" || m_Lepton_Selection=="0Lepton" || m_Lepton_Selection=="1Lepton"){
+  if( m_Lepton_Selection=="2Lepton" || m_Lepton_Selection=="0Lepton" || m_Lepton_Selection=="0Lepton_inv" || m_Lepton_Selection=="1Lepton"){
     NJetSel->addSelectionModule(new NJetSelection(1,int_infinity(),150));
     //NJetSel->addSelectionModule(new TwoDCut());
     //NJetSel->addSelectionModule(new NPrimaryVertexSelection(1)); //at least one good PV
@@ -106,20 +111,29 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
 
 
   Selection* MuonSel = new Selection("MuonSel");
-  if( m_Lepton_Selection=="2Lepton"|| m_Lepton_Selection=="3Lepton"){
-    MuonSel->addSelectionModule(new NMuonSelection(2,1000,30));
-    MuonSel->addSelectionModule(new NMuonSelection(2,2,20));
+  if( m_Lepton_Selection=="2Lepton"){
+    //MuonSel->addSelectionModule(new NMuonSelection(2,1000,30));
+    MuonSel->addSelectionModule(new NMuonSelection(2,2,25));
     MuonSel->addSelectionModule(new NMuonSelection(1,2,45));
+    MuonSel->addSelectionModule(new relIsoMu(0.15));
+  }
+  else if(m_Lepton_Selection=="3Lepton"){
+    MuonSel->addSelectionModule(new NMuonSelection(2,5,25));
+    MuonSel->addSelectionModule(new NMuonSelection(1,5,45));
     MuonSel->addSelectionModule(new relIsoMu(0.15));
   }
 
   Selection* EleSel = new Selection("EleSel");
-  if( m_Lepton_Selection=="2Lepton"|| m_Lepton_Selection=="3Lepton"){
-    EleSel->addSelectionModule(new NElectronSelection(2,1000,30));
-    EleSel->addSelectionModule(new NElectronSelection(2,2,20));
-    EleSel->addSelectionModule(new NElectronSelection(1,2,45));
+  if( m_Lepton_Selection=="2Lepton"){
+    //EleSel->addSelectionModule(new NElectronSelection(2,1000,30));
+    EleSel->addSelectionModule(new NElectronSelection(2,2,25));
+    EleSel->addSelectionModule(new NElectronSelection(1,3,45));
     //EleSel->addSelectionModule(new TriggerSelection("HLT_Ele30_CaloIdVT_TrkIdT_PFNoPUJet100_PFNoPUJet25_v"));
   }
+  else if(m_Lepton_Selection=="3Lepton"){
+    EleSel->addSelectionModule(new NElectronSelection(2,5,25));
+    EleSel->addSelectionModule(new NElectronSelection(1,5,45));
+  } 
 
   Selection* Muon1Sel = new Selection("Muon1Sel");
   if( m_Lepton_Selection=="2Lepton") Muon1Sel->addSelectionModule(new NMuonSelection(1,1,20));
@@ -131,7 +145,8 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
   cmsTopTagSel->addSelectionModule(new NCMSTopTagSelection(1,1));
 
   Selection* bTagSel = new Selection("bTagSel");
-  bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVM));
+  if( m_Lepton_Selection=="2Lepton"|| m_Lepton_Selection=="3Lepton") bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVL));
+  if( m_Lepton_Selection=="0Lepton"|| m_Lepton_Selection=="1Lepton"|| m_Lepton_Selection =="0Lepton_inv") bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVM));
 
   Selection* nsubjettiness = new Selection("nsubjettiness");
   //nsubjettiness->addSelectionModule(new );
@@ -277,19 +292,19 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   if( m_Lepton_Selection=="2Lepton")
     calc->Reco_Zt.Fill_2_lep(*bcc->jets,*bcc->muons,*bcc->electrons);
   if( m_Lepton_Selection=="3Lepton")
-    calc->Reco_Zt.Fill_3_lep(*bcc->jets,*bcc->muons,*bcc->electrons, bcc->met->v4());
-  if( m_Lepton_Selection=="0Lepton")
+    //calc->Reco_Zt.Fill_3_lep(*bcc->jets,*bcc->muons,*bcc->electrons, bcc->met->v4());
+  if( m_Lepton_Selection=="0Lepton" || m_Lepton_Selection=="0Lepton_inv")
     calc->Reco_Zt.Fill_had_combi(*bcc->jets, bcc->met);
 
 
-  RecoZt->Fill();
+  //RecoZt->Fill();
   Jets->Fill();
   Event->Fill();
   Muon->Fill();
   Electron->Fill();
 
  if(bTagSel->passSelection()){ 
-  bTag_RecoZt->Fill();
+  //bTag_RecoZt->Fill();
   bTag_Jets->Fill();
   bTag_Event->Fill();
   bTag_Muon->Fill();
@@ -300,10 +315,10 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   cmsTopTag_Event->Fill();
   cmsTopTag_Muon->Fill();
   cmsTopTag_Electron->Fill();
-  cmsTopTag_RecoZt->Fill();
+  //cmsTopTag_RecoZt->Fill();
 }
  if(nsubjettiness->passSelection()){ 
-  nsubjettiness_RecoZt->Fill();
+  //nsubjettiness_RecoZt->Fill();
   nsubjettiness_Jets->Fill();
   nsubjettiness_Event->Fill();
   nsubjettiness_Muon->Fill();
