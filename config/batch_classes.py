@@ -8,13 +8,13 @@ def write_script(name):
     myfile = open('test/split_script_'+name+'.sh','w')
     
     myfile.write(
-    """#!/bin/zsh
+    """#!/bin/bash
 #
 #$ -M daniel.gonzalez@desy.de
 # This is a simple example of a SGE batch script
    
 sframe_main test/"""+name+"""_${SGE_TASK_ID}.xml
-if[$?==0] && echo "success "${SGE_TASK_ID}
+if[$?==0] echo "success "${SGE_TASK_ID}
 """)
     
     myfile.close()
@@ -45,7 +45,7 @@ def submitt_qsub(NFiles,Stream,name):
         os.makedirs(Stream)
         print Stream+' has been created'
  
-    print call(['qsub'+' -V'+' -l os=sld6'+' -cwd'+' -l site=hh'+' -t 1-'+str(NFiles)+' -o '+Stream+'/'+' -e '+Stream+'/'+' test/split_script_'+name+'.sh'], shell=True)
+    print call(['qsub'+' -V'+' -l os=sld6'+' -l site=hh'+' -cwd'+' -t 1-'+str(NFiles)+' -o '+Stream+'/'+' -e '+Stream+'/'+' test/split_script_'+name+'.sh'], shell=True)
 
 def resubmit(Stream,name):
     #print Stream ,name

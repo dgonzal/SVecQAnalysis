@@ -13,9 +13,9 @@
 
 	<Package Name="SVecQAnalysis.par" />
 
-<!--	<Cycle Name="SVecQAnalysisSelectionCycle"  RunMode="PROOF" ProofServer="PoD://"  ProofWorkDir="/nfs/dust/cms/user/gonvaq/PROOF/" OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_Selection_0Lepton_Reco/" PostFix="" TargetLumi="1" >-->
+	<Cycle Name="SVecQAnalysisSelectionCycle"  RunMode="PROOF" ProofServer="PoD://"  ProofWorkDir="/nfs/dust/cms/user/gonvaq/PROOF/" OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_Selection_0Lepton_Reco/" PostFix="" TargetLumi="1" >-->
 	<Cycle Name="SVecQAnalysisSelectionCycle"  OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_Selection_0Lepton_Reco/" PostFix="" TargetLumi="1" >
-<!--
+
 	        <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DATA" Cacheable="False">
 		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.Ele_DATA_A.root" Lumi="0.0"/> 
 		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.Ele_DATA_B.root" Lumi="0.0"/> 
@@ -25,15 +25,6 @@
 		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.Mu_DATA_B.root" Lumi="0.0"/> 
 		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.Mu_DATA_C.root" Lumi="0.0"/> 
 		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.Mu_DATA_D.root" Lumi="0.0"/> 
-		  <InputTree Name="AnalysisTree" /> 
-		  <OutputTree Name="AnalysisTree" />  
-		</InputData>
--->
-                <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DATA" Cacheable="False">
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.DATA_A.root" Lumi="0.0"/> 
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.DATA_B.root" Lumi="0.0"/> 
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.DATA_C.root" Lumi="0.0"/> 
-		  <In FileName="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton_Reco/SVecQAnalysisPreSelectionCycle.DATA.DATA_D.root" Lumi="0.0"/>
 		  <InputTree Name="AnalysisTree" /> 
 		  <OutputTree Name="AnalysisTree" />  
 		</InputData>

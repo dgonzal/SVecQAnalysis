@@ -85,19 +85,15 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
 
 
   Selection* HTSel = new Selection("HTSel");
-  HTSel->addSelectionModule(new HTCut(200));
   if( m_Lepton_Selection=="2Lepton"){
     //HTSel->addSelectionModule(new METCut(150,999999));
+    HTSel->addSelectionModule(new HTCut(200));
     HTSel->addSelectionModule(new HTlepCut(200,999999));
   }
   else if(m_Lepton_Selection =="had_inv"){
-    HTSel->addSelectionModule(new HTCut(1000));
-    HTSel->addSelectionModule(new METCut(350,999999));
-    HTSel->addSelectionModule(new JetFirstDeltaR(.8)); 
-
+    HTSel->addSelectionModule(new METCut(250,999999));
   }
   else if(m_Lepton_Selection =="fullhad"){
-    HTSel->addSelectionModule(new HTCut(1000));
     HTSel->addSelectionModule(new METCut(0,50));
   }
 
@@ -160,7 +156,7 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
 
   Selection* bTagSel = new Selection("bTagSel");
   //if( m_Lepton_Selection=="2Lepton"|| m_Lepton_Selection=="3Lepton") bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVL));
-  if( m_Lepton_Selection=="1Lepton") bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVT));
+  //if( m_Lepton_Selection=="0Lepton"|| m_Lepton_Selection=="1Lepton"|| m_Lepton_Selection =="had_inv") bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVM));
   bTagSel->addSelectionModule(new NBTagSelection(1, 1, e_CSVM));
 
   Selection* nsubjettiness = new Selection("nsubjettiness");
@@ -191,7 +187,7 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
   RegisterHistCollection( new EventHists("cmsTopTag_Event") );
   RegisterHistCollection( new MuonHists("cmsTopTag_Muon") );
   RegisterHistCollection( new ElectronHists("cmsTopTag_Electron") );
-  RegisterHistCollection( new RecoHists("cmsTopTag_RecoZt",5) );
+  RegisterHistCollection( new RecoHists("cmsTopTag_RecoZt") );
 
   //Histograms with Anti-CMS Top Tag
   RegisterHistCollection( new JetHists("anticmsTopTag_Jets") );
@@ -205,8 +201,7 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
   RegisterHistCollection( new EventHists("bTag_Event") );
   RegisterHistCollection( new MuonHists("bTag_Muon") );
   RegisterHistCollection( new ElectronHists("bTag_Electron") );
-  RegisterHistCollection( new RecoHists("bTag_RecoZt",5) );
-
+  RegisterHistCollection( new RecoHists("bTag_RecoZt") );
 
   //Histograms with Anti-b-Tag
   RegisterHistCollection( new JetHists("antibTag_Jets") );
@@ -221,7 +216,7 @@ void SVecQAnalysisSelectionCycle::BeginInputData( const SInputData& id ) throw( 
   RegisterHistCollection( new EventHists("bTag_cmsTopTag_Event") );
   RegisterHistCollection( new MuonHists("bTag_cmsTopTag_Muon") );
   RegisterHistCollection( new ElectronHists("bTag_cmsTopTag_Electron") );
-  RegisterHistCollection( new RecoHists("bTag_cmsTopTag_RecoZt",5) );
+  RegisterHistCollection( new RecoHists("bTag_cmsTopTag_RecoZt") );
 
 
 
@@ -289,8 +284,8 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
 
   if(!HTSel->passSelection())  throw SError( SError::SkipEvent );
   if(!NJetSel->passSelection())  throw SError( SError::SkipEvent ); 
-  //if(!MuonSel->passSelection() && !EleSel->passSelection())  throw SError( SError::SkipEvent ); 
-  //if(Muon1Sel->passSelection() || Ele1Sel->passSelection())  throw SError( SError::SkipEvent );
+  if(!MuonSel->passSelection() && !EleSel->passSelection())  throw SError( SError::SkipEvent ); 
+  if(Muon1Sel->passSelection() || Ele1Sel->passSelection())  throw SError( SError::SkipEvent );
 
 
 
@@ -358,12 +353,12 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   //if( m_Lepton_Selection=="3Lepton")
   //calc->Reco_Zt.Fill_3_lep(*bcc->jets,*bcc->muons,*bcc->electrons, bcc->met->v4());
  
-  
+
   if(m_Lepton_Selection=="had_inv")
     calc->Reco_Zt.Fill_had_inv_combi(*bcc->jets, bcc->met);
   if(m_Lepton_Selection=="fullhad")
     calc->Reco_Zt.Fill_fullhad_combi(*bcc->jets);
-  
+
 
   RecoZt->Fill();
   Jets->Fill();
@@ -372,40 +367,40 @@ void SVecQAnalysisSelectionCycle::ExecuteEvent( const SInputData& id, Double_t w
   Electron->Fill();
 
  if(bTagSel->passSelection()){ 
-   bTag_RecoZt->Fill();
-   bTag_Jets->Fill();
-   bTag_Event->Fill();
-   bTag_Muon->Fill();
-   bTag_Electron->Fill();
+  bTag_RecoZt->Fill();
+  bTag_Jets->Fill();
+  bTag_Event->Fill();
+  bTag_Muon->Fill();
+  bTag_Electron->Fill();
  }
  if(!bTagSel->passSelection()){ 
-   antibTag_RecoZt->Fill();
-   antibTag_Jets->Fill();
-   antibTag_Event->Fill();
-   antibTag_Muon->Fill();
-   antibTag_Electron->Fill();
+  antibTag_RecoZt->Fill();
+  antibTag_Jets->Fill();
+  antibTag_Event->Fill();
+  antibTag_Muon->Fill();
+  antibTag_Electron->Fill();
  }
 
  if(cmsTopTagSel->passSelection()){ 
-   cmsTopTag_Jets->Fill();
-   cmsTopTag_Event->Fill();
-   cmsTopTag_Muon->Fill();
-   cmsTopTag_Electron->Fill();
-   cmsTopTag_RecoZt->Fill();
+  cmsTopTag_Jets->Fill();
+  cmsTopTag_Event->Fill();
+  cmsTopTag_Muon->Fill();
+  cmsTopTag_Electron->Fill();
+  cmsTopTag_RecoZt->Fill();
  }
  if(!cmsTopTagSel->passSelection()){ 
-   anticmsTopTag_Jets->Fill();
-   anticmsTopTag_Event->Fill();
-   anticmsTopTag_Muon->Fill();
-   anticmsTopTag_Electron->Fill();
-   anticmsTopTag_RecoZt->Fill();
+  anticmsTopTag_Jets->Fill();
+  anticmsTopTag_Event->Fill();
+  anticmsTopTag_Muon->Fill();
+  anticmsTopTag_Electron->Fill();
+  anticmsTopTag_RecoZt->Fill();
  }
  if(cmsTopTagSel->passSelection() && bTagSel->passSelection()){ 
-   bTag_cmsTopTag_Jets->Fill();
-   bTag_cmsTopTag_Event->Fill();
-   bTag_cmsTopTag_Muon->Fill();
-   bTag_cmsTopTag_Electron->Fill();
-   bTag_cmsTopTag_RecoZt->Fill();
+  bTag_cmsTopTag_Jets->Fill();
+  bTag_cmsTopTag_Event->Fill();
+  bTag_cmsTopTag_Muon->Fill();
+  bTag_cmsTopTag_Electron->Fill();
+  bTag_cmsTopTag_RecoZt->Fill();
  }
 
 /*

@@ -36,7 +36,8 @@ class RecoZt
   void Fill_1_lep(const vector<Jet> & jets, const vector<Muon> & muons, const vector<Electron> & electrons, const LorentzVector & met );
   void Fill_2_lep(const vector<Jet> & jets, const vector<Muon> & muons, const vector<Electron> & electrons );
   void Fill_3_lep(const vector<Jet> & jets, const vector<Muon> & muons, const vector<Electron> & electrons, const LorentzVector & met );
-  void Fill_had_combi(const vector<Jet>& jets, MET* met);
+  void Fill_had_inv_combi(const vector<Jet>& jets, MET* met);
+  void Fill_fullhad_combi(const vector<Jet>& jets);
 
   
   RecoZt_hyp get_best_chi2();

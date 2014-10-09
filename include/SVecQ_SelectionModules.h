@@ -17,7 +17,18 @@ class relIsoMu : public SelectionModule {
    double m_relIso;
 };
 
+class JetFirstDeltaR : public SelectionModule {
+ public:
+  JetFirstDeltaR(double deltR_min);
+  ~JetFirstDeltaR(){};
 
+   virtual bool pass(BaseCycleContainer*);
+   virtual std::string description();
+
+
+ private:
+   double m_deltR_min;
+};
 
 class GenLeptonSelection: public SelectionModule {
  public:

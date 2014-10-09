@@ -22,6 +22,40 @@ std::string relIsoMu::description()
     return s;
 }
 
+JetFirstDeltaR::JetFirstDeltaR(double deltR_min){
+  m_deltR_min = deltR_min ;
+}
+
+bool JetFirstDeltaR::pass(BaseCycleContainer* bcc){
+
+  std::vector< Jet > jets = *bcc->jets;
+  if(jets.size()<1) return false;
+  if(jets.size()==1) return true;
+
+  sort(jets.begin(),jets.end(),HigherPt());
+
+  Jet leading_jet = jets.at(0);
+  
+  double minimum = 9999;
+  
+  for(unsigned int i = 1; i <jets.size(); i++){
+      if(leading_jet.deltaR(jets.at(i)) < minimum ){ 
+	minimum = leading_jet.deltaR(jets.at(i));
+      }
+    }
+      
+  if(m_deltR_min<minimum) return false;
+      
+  return true;
+}
+
+std::string JetFirstDeltaR::description()
+{
+    char s[100];
+    sprintf(s, " deltaRmin(leading Jet, next  Jet) <= %f",m_deltR_min);
+
+    return s;
+}
 
 
 NSumLepSel::NSumLepSel(int min, int max)

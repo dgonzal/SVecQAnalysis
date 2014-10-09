@@ -28,7 +28,7 @@ class RecoHists : public BaseHists {
 
  public:
   /// Named constructor
-  RecoHists(const char* name);
+  RecoHists(const char* name, int factor = 1);
   
   /// Default destructor
   ~RecoHists();
@@ -41,7 +41,7 @@ class RecoHists : public BaseHists {
   
   
  private:
- 
+  int m_factor;
   
   
 }; // class RecoHists

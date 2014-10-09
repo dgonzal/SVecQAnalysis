@@ -179,44 +179,87 @@ void RecoZt::Fill_1_lep(const vector<Jet> & jets, const vector<Muon> & muons, co
   }
 }
 
-   
-void RecoZt::Fill_had_combi(const vector<Jet> & jets, MET* met){
+void RecoZt::Fill_fullhad_combi(const vector<Jet> & jets){
   unsigned int n_jets = jets.size();
   if(n_jets>7) n_jets=7; //avoid crashes in events with many jets
   unsigned int max_j = myPow(3, n_jets);
 
-  for(int i =0; i<2; ++i){
-    for (unsigned int j=0; j < max_j; j++) {
-      int num = j;
-      LorentzVector Z_v4(0,0,0,0);
-      LorentzVector top_v4(0,0,0,0);
-      RecoZt_hyp p_Hyp;
-      if(i == 1) Z_v4 = met->v4();
-
-      for (unsigned int k=0; k<n_jets; k++) {
-	// num is the k-th digit of j if you
-	// write j in a base-3 system. According
-	// to the value of this digit (which takes
-	// values from 0 to 2,
-	// in all possible combinations with the other digits),
-	// decide how to treat the jet.
-	
-	if(num%3==0) {
-	  Z_v4 = Z_v4 + jets.at(k).v4();
-	}
-	if(num%3==1) {
-	  top_v4 = top_v4 +jets.at(k).v4();
-	}
-	num /= 3;
+  for (unsigned int j=0; j < max_j; j++) {
+    int num = j;
+    LorentzVector Z_v4(0,0,0,0);
+    LorentzVector top_v4(0,0,0,0);
+    RecoZt_hyp p_Hyp;
+    
+    for (unsigned int k=0; k<n_jets; k++) {
+      // num is the k-th digit of j if you
+      // write j in a base-3 system. According
+      // to the value of this digit (which takes
+      // values from 0 to 2,
+      // in all possible combinations with the other digits),
+      // decide how to treat the jet.
+      
+      if(num%3==0) {
+	Z_v4 = Z_v4 + jets.at(k).v4();
       }
-      if(Z_v4.pt()>0 && top_v4.pt()>0){
-	p_Hyp.Z=Z_v4;
-	p_Hyp.t=top_v4;
-	m_Hyp.push_back(p_Hyp);	
+      if(num%3==1) {
+	top_v4 = top_v4 +jets.at(k).v4();
       }
+      num /= 3;
+    }
+    if(Z_v4.pt()>0 && top_v4.pt()>0){
+      //cout<<1<<endl;
+      p_Hyp.Z=Z_v4;
+      p_Hyp.t=top_v4;
+      m_Hyp.push_back(p_Hyp);	
     }
   }
 }
+
+   
+void RecoZt::Fill_had_inv_combi(const vector<Jet> & jets, MET* met){
+  unsigned int n_jets = jets.size();
+  if(n_jets>7) n_jets=7; //avoid crashes in events with many jets
+  unsigned int max_j = myPow(3, n_jets);
+
+
+  //cout<<"MET E() "<<met->v4().E()<< " MET pT "<<met->v4().pt()<<" MET Mass "<<met->v4().M()<<endl;
+
+  for (unsigned int j=0; j < max_j; j++) {
+    int num = j;
+    LorentzVector Z_v4(met->pt(),0,met->phi(),sqrt(91*91+met->pt()*met->pt()));
+    //LorentzVector Z_v4(0,0,0,0);
+    //Z_v4.SetCoordinates(sqrt(met->pt(),0,met->phi());
+    //cout <<sqrt(90*90+met->pt()*met->pt()) <<endl;
+    
+
+    LorentzVector top_v4(0,0,0,0);
+    RecoZt_hyp p_Hyp;
+    //Z_v4 = met->v4();
+    
+    for (unsigned int k=0; k<n_jets; k++) {
+      // num is the k-th digit of j if you
+      // write j in a base-3 system. According
+      // to the value of this digit (which takes
+      // values from 0 to 2,
+      // in all possible combinations with the other digits),
+      // decide how to treat the jet.
+	
+      if(num%3==0) {
+	//Z_v4 = Z_v4 + jets.at(k).v4();
+      }
+      if(num%3==1) {
+	top_v4 = top_v4 +jets.at(k).v4();
+      }
+      num /= 3;
+    }
+    if(Z_v4.pt()>0 && top_v4.pt()>0){
+      p_Hyp.Z=Z_v4;
+      p_Hyp.t=top_v4;
+      m_Hyp.push_back(p_Hyp);	
+    }
+  }
+}
+
 
 RecoZt_hyp RecoZt::get_best_chi2(){
   double chi2 = 9999999999;
@@ -230,6 +273,7 @@ RecoZt_hyp RecoZt::get_best_chi2(){
     position = i;
     }
   }
+
   if(position<0) cout<<"No Valid reconstruction"<<endl;
   return m_Hyp.at(position); 
 

@@ -9,6 +9,11 @@
 <!ENTITY EleDataC SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/EleHad_C.xml">
 <!ENTITY EleDataD SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/EleHad_D.xml">
 
+<!ENTITY JetHTA SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/Jet_Run2012A-22Jan2013-v1_ntuplewriter_ttbsm_53_plusprunedcfg.xml">
+<!ENTITY JetHTB SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/JetHT_Run2012B-22Jan2013-v1_ntuplewriter_ttbsm_53_plusprunedcfg.xml">
+<!ENTITY JetHTC SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/JetHT_Run2012C-22Jan2013-v1_ntuplewriter_ttbsm_53_plusprunedcfg.xml">
+<!ENTITY JetHTD SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/JetHT_Run2012D-22Jan2013-v1_ntuplewriter_ttbsm_53_plusprunedcfg.xml">
+
 <!ENTITY TprimeToTZinc_M-800 SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/TprimeToTZinc_M-800.xml">
 <!ENTITY TprimeToTZinc_M-1000 SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/TprimeToTZinc_M-1000.xml">
 <!ENTITY TprimeToTZinc_M-1300 SYSTEM "../../SFrameAnalysis/config/Samples_TTBSM53/TprimeToTZinc_M-1300.xml">
@@ -127,7 +132,7 @@
 
 <!--	<Cycle Name="SVecQAnalysisPreSelectionCycle"  RunMode="PROOF" ProofServer="PoD://"  ProofWorkDir="/nfs/dust/cms/user/gonvaq/PROOF/" OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton/" PostFix="" TargetLumi="0" >-->
 	<Cycle Name="SVecQAnalysisPreSelectionCycle"  OutputDirectory="/nfs/dust/cms/user/gonvaq/Analysis53X_v3/SVecQ_PreSelection_0Lepton/" PostFix="" TargetLumi="1" > 
-<!--
+
            <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DATA_A" Cacheable="True">
                         &EleDataA;
 			<InputTree Name="AnalysisTree" /> 
@@ -150,7 +155,7 @@
 			<InputTree Name="AnalysisTree" /> 
 			<OutputTree Name="AnalysisTree" />  
 		</InputData> 
--->
+
 <!--
 		<InputData Lumi="1" NEventsMax="-1" Type="MC" Version="TprimeToTZinc_M-800" Cacheable="True">
 		  &TprimeToTZinc_M-800;

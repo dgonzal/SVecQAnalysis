@@ -216,7 +216,7 @@ def write_all_xml(path,header,Job):
 
 
 
-xmlfile = 'par_SVecQ_PreSelection_config.xml'#"parser_test.xml"
+xmlfile = 'par_SVecQ_PreSelection_config0.xml'#"parser_test.xml"
 
 sax_parser = xml.sax.make_parser()
 xmlparsed = parse(xmlfile,sax_parser)

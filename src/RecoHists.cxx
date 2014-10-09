@@ -7,10 +7,10 @@
 using namespace std;
 
 
-RecoHists::RecoHists(const char* name) : BaseHists(name)
+RecoHists::RecoHists(const char* name, int factor) : BaseHists(name)
 {
   // named default constructor
-   
+  m_factor = factor;
 }
 
 RecoHists::~RecoHists(){
@@ -21,53 +21,58 @@ void RecoHists::Init()
 {
   
   
-  Book( TH1F( "pt_Z", "p_{T} Z", 100, 0 , 1000));
-  Book( TH1F( "pt_Z_ly", "p_{T} Z", 100, 0 , 1000));
+  Book( TH1F( "pt_Z", "p_{T} Z", 100/m_factor, 0 , 1000));
+  Book( TH1F( "pt_Z_ly", "p_{T} Z", 100/m_factor, 0 , 1000));
 
-  Book( TH1F( "eta_Z", "#eta Z", 100, -10 , 10));
-  Book( TH1F( "eta_Z_ly", "#eta Z", 100, -10 , 10));
+  Book( TH1F( "eta_Z", "#eta Z", 100/m_factor, -10 , 10));
+  Book( TH1F( "eta_Z_ly", "#eta Z", 100/m_factor, -10 , 10));
   
-  Book( TH1F( "phi_Z", "#phi Z", 100, -4 , 4));
-  Book( TH1F( "phi_Z_ly", "#phi Z", 100, -4 , 4));
+  Book( TH1F( "phi_Z", "#phi Z", 100/m_factor, -4 , 4));
+  Book( TH1F( "phi_Z_ly", "#phi Z", 100/m_factor, -4 , 4));
   
-  Book( TH1F( "mass_Z", "mass Z", 100, 0 , 1000));
-  Book( TH1F( "mass_Z_ly", "mass Z", 100, 0 , 1000));
+  Book( TH1F( "mass_Z", "mass Z", 100/m_factor, 0 , 1000));
+  Book( TH1F( "mass_Z_ly", "mass Z", 100/m_factor, 0 , 1000));
  
-  Book( TH1F( "energy_Z", "E Z", 100, 0 , 1500));
-  Book( TH1F( "energy_Z_ly", "E Z", 100, 0 , 1500));
+  Book( TH1F( "energy_Z", "E Z", 100/m_factor, 0 , 1500));
+  Book( TH1F( "energy_Z_ly", "E Z", 100/m_factor, 0 , 1500));
   
-  Book( TH1F( "pt_t", "p_{T} t", 100, 0 , 1000));
-  Book( TH1F( "pt_t_ly", "p_{T} t", 100, 0 , 1000));
+  Book( TH1F( "pt_t", "p_{T} t", 100/m_factor, 0 , 1000));
+  Book( TH1F( "pt_t_ly", "p_{T} t", 100/m_factor, 0 , 1000));
 
-  Book( TH1F( "eta_t", "#eta t", 100, -10 , 10));
-  Book( TH1F( "eta_t_ly", "#eta t", 100, -10 , 10));
+  Book( TH1F( "eta_t", "#eta t", 100/m_factor, -10 , 10));
+  Book( TH1F( "eta_t_ly", "#eta t", 100/m_factor, -10 , 10));
   
-  Book( TH1F( "phi_t", "#phi t", 100, -4 , 4));
-  Book( TH1F( "phi_t_ly", "#phi t", 100, -4 , 4));
+  Book( TH1F( "phi_t", "#phi t", 100/m_factor, -4 , 4));
+  Book( TH1F( "phi_t_ly", "#phi t", 100/m_factor, -4 , 4));
   
-  Book( TH1F( "mass_t", "mass t", 100, 0 , 400));
-  Book( TH1F( "mass_t_ly", "mass t", 100, 0 , 400));
+  Book( TH1F( "mass_t", "mass t", 100/m_factor, 0 , 400));
+  Book( TH1F( "mass_t_ly", "mass t", 100/m_factor, 0 , 400));
  
-  Book( TH1F( "energy_t", "E t", 100, 200 , 1500));
-  Book( TH1F( "energy_t_ly", "E t", 100, 0 , 1500));
+  Book( TH1F( "energy_t", "E t", 100/m_factor, 200 , 1500));
+  Book( TH1F( "energy_t_ly", "E t", 100/m_factor, 0 , 1500));
 
-  Book( TH1F( "chi2", "chi2", 100, 0 , 1000));
-  Book( TH1F( "chi2_ly", "chi2", 100, 0 , 1000));
+  Book( TH1F( "chi2", "chi2", 100/m_factor, 0 , 1000));
+  Book( TH1F( "chi2_ly", "chi2", 100/m_factor, 0 , 1000));
 
-  Book( TH1F( "pt_tprime", "p_{T} T'", 100, 0 , 1000));
-  Book( TH1F( "pt_tprime_ly", "p_{T} T'", 100, 0 , 1000));
+  Book( TH1F( "pt_tprime", "p_{T} T'", 100/m_factor, 0 , 1000));
+  Book( TH1F( "pt_tprime_ly", "p_{T} T'", 100/m_factor, 0 , 1000));
 
-  Book( TH1F( "eta_tprime", "#eta T'", 100, -10 , 10));
-  Book( TH1F( "eta_tprime_ly", "#eta T'", 100, -10 , 10));
+  Book( TH1F( "eta_tprime", "#eta T'", 100/m_factor, -10 , 10));
+  Book( TH1F( "eta_tprime_ly", "#eta T'", 100/m_factor, -10 , 10));
   
-  Book( TH1F( "phi_tprime", "#phi T'", 100, -4 , 4));
-  Book( TH1F( "phi_tprime_ly", "#phi T'", 100, -4 , 4));
+  Book( TH1F( "phi_tprime", "#phi T'", 100/m_factor, -4 , 4));
+  Book( TH1F( "phi_tprime_ly", "#phi T'", 100/m_factor, -4 , 4));
   
-  Book( TH1F( "mass_tprime", "mass T'", 100, 0 ,2500));
-  Book( TH1F( "mass_tprime_ly", "mass T'", 100, 0 , 2500));
+  Book( TH1F( "mass_tprime", "mass T'", 100/m_factor, 0 ,2500));
+  Book( TH1F( "mass_tprime_ly", "mass T'", 100/m_factor, 0 , 2500));
  
-  Book( TH1F( "energy_tprime", "E T'", 100, 0 , 1500));
-  Book( TH1F( "energy_tprime_ly", "E T'", 100, 0 , 1500));
+  Book( TH1F( "energy_tprime", "E T'", 100/m_factor, 0 , 1500));
+  Book( TH1F( "energy_tprime_ly", "E T'", 100/m_factor, 0 , 1500));
+
+  Book( TH1F( "transversemass_tprime", "m_{T}'", 100/m_factor, 0 , 2000));
+  Book( TH1F( "transversemass_tprime_ly", "m_{T}'", 100/m_factor, 0 , 2000));
+  
+
 
 }
 
@@ -77,13 +82,17 @@ void RecoHists::Fill()
  
 
   EventCalc* calc = EventCalc::Instance();
-  LuminosityHandler* lumih = calc->GetLumiHandler();
+  LuminosityHandler* lumi = calc->GetLumiHandler();
 
   BaseCycleContainer* bcc = calc->GetBaseCycleContainer();
  
   // important: get the event weight
   double weight = calc->GetWeight();
   
+
+  if(calc->Reco_Zt.Hyp().size()<1)return;
+
+
   RecoZt_hyp RecoHyp= calc->Reco_Zt.get_best_chi2();
 
   LorentzVector zboson = RecoHyp.Z;
@@ -113,13 +122,21 @@ void RecoHists::Fill()
   Hist("energy_t_ly")->Fill(tquark.E(),weight);
  
  
+
+
+
   double chi2 = (tquark.M()-173)*(tquark.M()-173)*0.02 + (zboson.M()-91)*(zboson.M()-91)*0.1;
+  if(zboson.M()!=zboson.M()) chi2 = (tquark.M()-173)*(tquark.M()-173)*0.02;
+
 
   Hist("chi2")->Fill(chi2,weight);
   Hist("chi2_ly")->Fill(chi2,weight);
 
 
   LorentzVector tprime = RecoHyp.t+RecoHyp.Z;
+
+  //cout<<"Mass Z "<<sqrt(zboson.M2())<<" Mass tprime "<<sqrt(tprime.M2())<<" chi2 "<<chi2<<endl;
+
 
   Hist("pt_tprime"       )->Fill(tprime.pt(),weight);	 
   Hist("pt_tprime_ly"    )->Fill(tprime.pt(),weight);	 
@@ -132,6 +149,15 @@ void RecoHists::Fill()
   Hist("energy_tprime"   )->Fill(tprime.E(),weight);
   Hist("energy_tprime_ly")->Fill(tprime.E(),weight);
   
+  
+  double transverse_mass = RecoHyp.Z.pt()*RecoHyp.t.pt()*(1-abs(cos(deltaR(RecoHyp.Z,RecoHyp.t))));
+  double angle = cos(deltaR(RecoHyp.Z,RecoHyp.t));
+
+  //cout<< transverse_mass<<" "<< angle <<endl;
+
+  Hist("transversemass_tprime")->Fill(transverse_mass,weight);
+  Hist("transversemass_tprime_ly")->Fill(transverse_mass,weight);
+
 }
 
 
